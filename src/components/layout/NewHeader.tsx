@@ -30,7 +30,7 @@ export default function NewHeader() {
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" scroll={false} className="flex items-center">
-              <img src="/images/logo.svg" alt="Sheen Path Logo" className="h-16 w-auto" />
+              <img src="/images/logo.png" alt="Electify India Logo" className="h-14 w-auto" />
             </Link>
           </div>
 
