@@ -1,0 +1,974 @@
+'use client';
+
+// This ensures the component runs on the client side
+// Fixes RSC (React Server Component) loading issue
+
+import { useState, Suspense, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useRouter } from 'next/navigation';
+import DashboardLayout from '@/components/layout/DashboardLayout';
+import { motion } from 'framer-motion';
+import QuizResult from '@/components/QuizResult';
+
+// Add TypeScript declarations for Web Speech API
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList;
+  resultIndex: number;
+  interpretation: any;
+  emma: Document | null;
+}
+
+interface SpeechRecognitionResultList {
+  [index: number]: SpeechRecognitionResult;
+  length: number;
+  item(index: number): SpeechRecognitionResult;
+}
+
+interface SpeechRecognitionResult {
+  [index: number]: SpeechRecognitionAlternative;
+  length: number;
+  item(index: number): SpeechRecognitionAlternative;
+  isFinal: boolean;
+}
+
+interface SpeechRecognitionAlternative {
+  transcript: string;
+  confidence: number;
+}
+
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  maxAlternatives: number;
+  onaudioend: ((this: SpeechRecognition, ev: Event) => any) | null;
+  onaudiostart: ((this: SpeechRecognition, ev: Event) => any) | null;
+  onend: ((this: SpeechRecognition, ev: Event) => any) | null;
+  onerror: ((this: SpeechRecognition, ev: Event) => any) | null;
+  onnomatch: ((this: SpeechRecognition, ev: Event) => any) | null;
+  onresult: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => any) | null;
+  onsoundend: ((this: SpeechRecognition, ev: Event) => any) | null;
+  onsoundstart: ((this: SpeechRecognition, ev: Event) => any) | null;
+  onspeechend: ((this: SpeechRecognition, ev: Event) => any) | null;
+  onspeechstart: ((this: SpeechRecognition, ev: Event) => any) | null;
+  onstart: ((this: SpeechRecognition, ev: Event) => any) | null;
+  start(): void;
+  stop(): void;
+  abort(): void;
+}
+
+interface SpeechRecognitionConstructor {
+  new(): SpeechRecognition;
+  prototype: SpeechRecognition;
+}
+
+declare global {
+  interface Window {
+    SpeechRecognition: SpeechRecognitionConstructor;
+    webkitSpeechRecognition: SpeechRecognitionConstructor;
+  }
+}
+
+// Ensure SpeechRecognition is available in the global scope
+declare const SpeechRecognition: SpeechRecognitionConstructor;
+
+type QuizScores = {
+  Medical: number;
+  "Non-Medical": number;
+  Commerce: number;
+  Arts: number;
+  Vocational: number;
+  Aptitude?: number; // optional, since you don't show it
+};
+
+// quiz questions
+const quizQuestions = [
+  // Section 1: Interests (Q1–Q6)
+  {
+    id: 1,
+    question: "Which activity excites you the most?",
+    type: "interests",
+    options: [
+      { id: "A", text: "Understanding how medicines work", stream: "Medical", weight: 2 },
+      { id: "B", text: "Building a drone/robot", stream: "Non-Medical", weight: 2 },
+      { id: "C", text: "Managing a shop’s accounts", stream: "Commerce", weight: 2 },
+      { id: "D", text: "Writing a story/poem", stream: "Arts", weight: 2 },
+      { id: "E", text: "Cooking a Kashmiri dish", stream: "Vocational", weight: 2 },
+    ],
+  },
+  {
+    id: 2,
+    question: "If you had to choose one subject for a year, what would it be?",
+    type: "interests",
+    options: [
+      { id: "A", text: "Biology", stream: "Medical", weight: 2 },
+      { id: "B", text: "Physics/Math", stream: "Non-Medical", weight: 2 },
+      { id: "C", text: "Economics", stream: "Commerce", weight: 2 },
+      { id: "D", text: "History", stream: "Arts", weight: 2 },
+      { id: "E", text: "Computer/Design", stream: "Vocational", weight: 2 },
+    ],
+  },
+  {
+    id: 3,
+    question: "How would you like to contribute to your community?",
+    type: "interests",
+    options: [
+      { id: "A", text: "Start a health camp", stream: "Medical", weight: 2 },
+      { id: "B", text: "Build solar panels", stream: "Non-Medical", weight: 2 },
+      { id: "C", text: "Teach budgeting", stream: "Commerce", weight: 2 },
+      { id: "D", text: "Write cultural blogs", stream: "Arts", weight: 2 },
+      { id: "E", text: "Promote tourism", stream: "Vocational", weight: 2 },
+    ],
+  },
+  {
+    id: 4,
+    question: "Which career sounds most exciting to you?",
+    type: "interests",
+    options: [
+      { id: "A", text: "Doctor/Nurse", stream: "Medical", weight: 2 },
+      { id: "B", text: "Engineer/Scientist", stream: "Non-Medical", weight: 2 },
+      { id: "C", text: "Businessperson/CA", stream: "Commerce", weight: 2 },
+      { id: "D", text: "Author/Journalist", stream: "Arts", weight: 2 },
+      { id: "E", text: "Chef/Technician", stream: "Vocational", weight: 2 },
+    ],
+  },
+  {
+    id: 5,
+    question: "How do you spend your free time?",
+    type: "interests",
+    options: [
+      { id: "A1", text: "Reading science books (Medical)", stream: ["Medical", "Non-Medical"], weight: 2 },
+      { id: "B", text: "Solving puzzles", stream: "Non-Medical", weight: 2 },
+      { id: "C", text: "Counting savings", stream: "Commerce", weight: 2 },
+      { id: "D", text: "Painting/Performing", stream: "Arts", weight: 2 },
+      { id: "E", text: "Learning a skill", stream: "Vocational", weight: 2 },
+    ],
+  },
+  {
+    id: 6,
+    question: "If you were given ₹5000, what excites you the most?",
+    type: "interests",
+    options: [
+      { id: "A", text: "Buying lab equipment", stream: "Medical", weight: 2 },
+      { id: "B", text: "Robotics kit", stream: "Non-Medical", weight: 2 },
+      { id: "C", text: "Starting a small trade", stream: "Commerce", weight: 2 },
+      { id: "D", text: "Art supplies", stream: "Arts", weight: 2 },
+      { id: "E", text: "Tools for a skill", stream: "Vocational", weight: 2 },
+    ],
+  },
+
+  // Section 2: Logical Aptitude (Q7–Q10)
+  {
+    id: 7,
+    question: "Which comes next? 🔺🔵🔺🔵…",
+    type: "aptitude",
+    options: [
+      { id: "A", text: "🔵", stream: "Aptitude", weight: 0 },
+      { id: "B", text: "🔺", stream: "Aptitude", weight: 2 },
+      { id: "C", text: "🔺🔵", stream: "Aptitude", weight: 1 },
+    ],
+  },
+  {
+    id: 8,
+    question: "If KASHMIR → MIRKASH, how will VALLEY be written?",
+    type: "aptitude",
+    options: [
+      { id: "A", text: "EYVALL", stream: "Aptitude", weight: 2 },
+      { id: "B", text: "LLEYVA", stream: "Aptitude", weight: 0 },
+      { id: "C", text: "VLEAYL", stream: "Aptitude", weight: 1 },
+    ],
+  },
+  {
+    id: 9,
+    question: "A car is to road as boat is to…?",
+    type: "aptitude",
+    options: [
+      { id: "A", text: "River", stream: "Aptitude", weight: 2 },
+      { id: "B", text: "Air", stream: "Aptitude", weight: 0 },
+      { id: "C", text: "Station", stream: "Aptitude", weight: 1 },
+    ],
+  },
+  {
+    id: 10,
+    question: "If 2+3=25, 4+5=45, then 6+7=?",
+    type: "aptitude",
+    options: [
+      { id: "A", text: "67", stream: "Aptitude", weight: 2 },
+      { id: "B", text: "42", stream: "Aptitude", weight: 0 },
+      { id: "C", text: "76", stream: "Aptitude", weight: 1 },
+    ],
+  },
+
+  // Section 3: Numerical Aptitude (Q11–Q14)
+  {
+    id: 11,
+    question: "A cricket bat costs ₹800 and a ball costs ₹200. Price of 2 bats + 3 balls?",
+    type: "aptitude",
+    options: [
+      { id: "A", text: "₹2200", stream: "Aptitude", weight: 2 },
+      { id: "B", text: "₹2000", stream: "Aptitude", weight: 1 },
+      { id: "C", text: "₹1800", stream: "Aptitude", weight: 0 },
+    ],
+  },
+  {
+    id: 12,
+    question: "A farmer sells 50 apples for ₹250. Price for 200 apples?",
+    type: "aptitude",
+    options: [
+      { id: "A", text: "₹1000", stream: "Aptitude", weight: 2 },
+      { id: "B", text: "₹500", stream: "Aptitude", weight: 0 },
+      { id: "C", text: "₹750", stream: "Aptitude", weight: 1 },
+    ],
+  },
+  {
+    id: 13,
+    question: "If 1 USD = ₹80, how many rupees is $25?",
+    type: "aptitude",
+    options: [
+      { id: "A", text: "₹2000", stream: "Aptitude", weight: 2 },
+      { id: "B", text: "₹1800", stream: "Aptitude", weight: 1 },
+      { id: "C", text: "₹2500", stream: "Aptitude", weight: 0 },
+    ],
+  },
+  {
+    id: 14,
+    question: "A train moves at 60 km/hr. In 3 hours, distance covered = ?",
+    type: "aptitude",
+    options: [
+      { id: "A", text: "180 km", stream: "Aptitude", weight: 2 },
+      { id: "B", text: "200 km", stream: "Aptitude", weight: 0 },
+      { id: "C", text: "150 km", stream: "Aptitude", weight: 1 },
+    ],
+  },
+
+  // Section 4: Verbal Aptitude (Q15–Q17)
+  {
+    id: 15,
+    question: "Which is correct spelling?",
+    type: "aptitude",
+    options: [
+      { id: "A", text: "Environment", stream: "Aptitude", weight: 2 },
+      { id: "B", text: "Enviroment", stream: "Aptitude", weight: 0 },
+      { id: "C", text: "Environmnt", stream: "Aptitude", weight: 1 },
+    ],
+  },
+  {
+    id: 16,
+    question: "Choose correct sentence:",
+    type: "aptitude",
+    options: [
+      { id: "A", text: "The book is on the table.", stream: "Aptitude", weight: 2 },
+      { id: "B", text: "Book table on the is.", stream: "Aptitude", weight: 0 },
+      { id: "C", text: "The book table is on.", stream: "Aptitude", weight: 1 },
+    ],
+  },
+  {
+    id: 17,
+    question: "Which proverb makes sense?",
+    type: "aptitude",
+    options: [
+      { id: "A", text: "A stitch in time saves nine", stream: "Aptitude", weight: 2 },
+      { id: "B", text: "Apples fly in the sky", stream: "Aptitude", weight: 0 },
+      { id: "C", text: "Water burns quickly", stream: "Aptitude", weight: 1 },
+    ],
+  },
+
+  // Section 5: Creativity & Future Dreams (Q18–Q20)
+  {
+    id: 18,
+    question: "If you could invent something, what would it be?",
+    type: "future",
+    options: [
+      { id: "A", text: "A cure for disease", stream: "Medical", weight: 2 },
+      { id: "B", text: "A rocket/dam", stream: "Non-Medical", weight: 2 },
+      { id: "C", text: "A financial tool", stream: "Commerce", weight: 2 },
+      { id: "D", text: "A cultural story platform", stream: "Arts", weight: 2 },
+      { id: "E", text: "A tourism app", stream: "Vocational", weight: 2 },
+    ],
+  },
+  {
+    id: 19,
+    question: "Which school project do you like most?",
+    type: "future",
+    options: [
+      { id: "A", text: "Biology model", stream: "Medical", weight: 2 },
+      { id: "B", text: "Robotics/Math project", stream: "Non-Medical", weight: 2 },
+      { id: "C", text: "Business fair", stream: "Commerce", weight: 2 },
+      { id: "D", text: "Drama/Exhibition", stream: "Arts", weight: 2 },
+      { id: "E", text: "Handicraft fair", stream: "Vocational", weight: 2 },
+    ],
+  },
+  {
+    id: 20,
+    question: "Your dream role is…",
+    type: "future",
+    options: [
+      { id: "A", text: "Doctor", stream: "Medical", weight: 2 },
+      { id: "B", text: "Engineer", stream: "Non-Medical", weight: 2 },
+      { id: "C", text: "Entrepreneur", stream: "Commerce", weight: 2 },
+      { id: "D", text: "Author/Artist", stream: "Arts", weight: 2 },
+      { id: "E", text: "Chef/Tourism guide", stream: "Vocational", weight: 2 },
+    ],
+  },
+];
+
+
+
+// Career mappings based on streams
+const careerMappings = {
+  Medical: ["Doctor", "Nurse", "Pharmacist", "Biotechnologist"],
+  "Non-Medical": ["Engineer", "Scientist", "IT Professional", "Researcher"],
+  Commerce: ["Accountant", "Entrepreneur", "Financial Analyst", "Business Manager"],
+  Arts: ["Writer", "Journalist", "Historian", "Psychologist"],
+  Vocational: ["Chef", "Tourism Guide", "Mechanic", "Fashion Designer"],
+};
+
+function QuizContent() {
+  const { t, i18n } = useTranslation('common', { useSuspense: false });
+  const router = useRouter();
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState<{[key: number]: string}>({});
+  const [showResults, setShowResults] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState('en');
+  const [results, setResults] = useState<{
+    recommendedStream: string;
+    score: number;
+    careers: string[];
+  } | null>(null);
+  const [quizScores, setQuizScores] = useState<QuizScores>({
+    Medical: 0,
+    "Non-Medical": 0,
+    Commerce: 0,
+    Arts: 0,
+    Vocational: 0,
+    Aptitude: 0,
+  });
+  
+  // Speech synthesis for text-to-speech
+  const [speechSynthesis, setSpeechSynthesis] = useState<SpeechSynthesis | null>(null);
+  const [speaking, setSpeaking] = useState(false);
+  
+  // Speech recognition for voice input
+  const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
+  const [listening, setListening] = useState(false);
+  const [transcript, setTranscript] = useState('');
+  
+  // Track progress percentage
+  const progressPercentage = ((currentQuestion + 1) / quizQuestions.length) * 100;
+  
+  // Handle language change
+  const changeLanguage = (language: string) => {
+    i18n.changeLanguage(language);
+    setCurrentLanguage(language);
+  };
+  
+  // Initialize speech synthesis and recognition
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Initialize speech synthesis
+      setSpeechSynthesis(window.speechSynthesis);
+      
+      // Initialize speech recognition
+      if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+        // Use the standard SpeechRecognition or the webkit prefixed version
+        const SpeechRecognitionAPI: typeof SpeechRecognition = 
+          'SpeechRecognition' in window ? window.SpeechRecognition : window.webkitSpeechRecognition;
+        const recognitionInstance = new SpeechRecognitionAPI();
+        
+        // Configure recognition
+        recognitionInstance.continuous = false;
+        recognitionInstance.interimResults = false;
+        
+        // Set up event handlers
+        recognitionInstance.onstart = () => {
+          setListening(true);
+          setTranscript('');
+        };
+        
+        recognitionInstance.onresult = (event) => {
+          const transcript = event.results[0][0].transcript.trim().toLowerCase();
+          setTranscript(transcript);
+          processVoiceInput(transcript);
+        };
+        
+        recognitionInstance.onend = () => {
+          setListening(false);
+        };
+        
+        recognitionInstance.onerror = (event) => {
+          console.error('Speech recognition error', event.error);
+          setListening(false);
+        };
+        
+        setRecognition(recognitionInstance);
+      }
+    }
+    
+    return () => {
+      // Clean up speech synthesis and recognition when component unmounts
+      if (typeof window !== 'undefined') {
+        if (window.speechSynthesis) {
+          window.speechSynthesis.cancel();
+        }
+        
+        // Stop recognition if it's active
+        if (recognition) {
+          try {
+            recognition.stop();
+          } catch (e) {
+            // Ignore errors when stopping recognition that might not be active
+          }
+        }
+      }
+    };
+  }, []);
+
+  // Set language based on i18n
+  useEffect(() => {
+    if (i18n.language) {
+      setCurrentLanguage(i18n.language);
+    }
+  }, [i18n.language]);
+  
+  // Read question aloud when it changes
+  useEffect(() => {
+    if (!showResults && !loading && speechSynthesis && quizQuestions[currentQuestion]) {
+      // Cancel any ongoing speech
+      speechSynthesis.cancel();
+      
+      // Create a new utterance for the current question
+      const utterance = new SpeechSynthesisUtterance(quizQuestions[currentQuestion].question);
+      
+      // Set language based on current language selection
+      utterance.lang = currentLanguage === 'en' ? 'en-US' : 'ur-PK';
+      
+      // Set speaking state to true when speech starts
+      utterance.onstart = () => setSpeaking(true);
+      
+      // Set speaking state to false when speech ends
+      utterance.onend = () => setSpeaking(false);
+      
+      // Speak the question
+      speechSynthesis.speak(utterance);
+    }
+  }, [currentQuestion, showResults, loading, speechSynthesis, currentLanguage]);
+
+  // Process voice input to select an option
+  const processVoiceInput = (transcript: string) => {
+    const question = quizQuestions[currentQuestion];
+    if (!question) return;
+    
+    // Try to match the transcript to an option ID (A, B, C, D, E)
+    const optionMatch = transcript.match(/option\s*([a-e])|([a-e])\s*$/i);
+    if (optionMatch) {
+      const optionId = (optionMatch[1] || optionMatch[2]).toUpperCase();
+      const option = question.options.find(opt => opt.id === optionId);
+      if (option) {
+        handleAnswer(question.id, optionId);
+        return;
+      }
+    }
+    
+    // Try to match the transcript to an option text
+    for (const option of question.options) {
+      // Convert both to lowercase for case-insensitive matching
+      const optionText = option.text.toLowerCase();
+      if (transcript.includes(optionText) || 
+          // Also check if transcript includes the stream name
+          (typeof option.stream === 'string' && transcript.includes(option.stream.toLowerCase()))) {
+        handleAnswer(question.id, option.id);
+        return;
+      }
+    }
+  };
+  
+  // Toggle speech recognition
+  const toggleListening = () => {
+    if (!recognition) return;
+    
+    if (listening) {
+      recognition.stop();
+    } else {
+      try {
+        recognition.start();
+      } catch (error) {
+        console.error('Error starting speech recognition:', error);
+      }
+    }
+  };
+  
+  const handleAnswer = (questionId: number, optionId: string) => {
+    setAnswers({
+      ...answers,
+      [questionId]: optionId,
+    });
+  };
+
+  const handleNext = () => {
+    // Cancel any ongoing speech before moving to next question
+    if (speechSynthesis) {
+      speechSynthesis.cancel();
+    }
+    
+    if (currentQuestion < quizQuestions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      handleSubmit();
+    }
+  };
+
+  const handlePrevious = () => {
+    // Cancel any ongoing speech before moving to previous question
+    if (speechSynthesis) {
+      speechSynthesis.cancel();
+    }
+    
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1);
+    }
+  };
+
+  // Initialize scores
+const handleSubmit = () => {
+  setLoading(true);
+
+  // Initialize scores
+  const scores = {
+    Medical: 0,
+    "Non-Medical": 0,
+    Commerce: 0,
+    Arts: 0,
+    Vocational: 0,
+    Aptitude: 0, // keep aptitude too if you want to track it
+  };
+
+  // Process answers
+  Object.entries(answers).forEach(([questionId, optionId]) => {
+    const question = quizQuestions.find(q => q.id === parseInt(questionId));
+    if (question) {
+      const selectedOption = question.options.find(opt => opt.id === optionId);
+
+      if (selectedOption) {
+        // ✅ Handle array streams (like Q5 A1)
+        if (Array.isArray(selectedOption.stream)) {
+          selectedOption.stream.forEach(s => {
+            if (scores.hasOwnProperty(s)) {
+              scores[s] += selectedOption.weight;
+            }
+          });
+        } else {
+          if (scores.hasOwnProperty(selectedOption.stream)) {
+            scores[selectedOption.stream as keyof typeof scores] += selectedOption.weight;
+          }
+        }
+      }
+    }
+  });
+
+  // Find the highest scoring stream (ignoring Aptitude if you don’t want it as a result)
+  const validStreams = ["Medical", "Non-Medical", "Commerce", "Arts", "Vocational"];
+  let highestStream: keyof typeof scores = "Medical";
+  let highestScore = scores["Medical"];
+
+  validStreams.forEach(stream => {
+    if (scores[stream] > highestScore) {
+      highestStream = stream as keyof typeof scores;
+      highestScore = scores[stream];
+    }
+  });
+
+  // Calculate percentage score (relative to max possible)
+  const maxPossibleScore = quizQuestions.reduce((total, question) => {
+    const maxWeight = Math.max(...question.options.map(opt => opt.weight));
+    return total + maxWeight;
+  }, 0);
+
+  const percentageScore = Math.round((highestScore / maxPossibleScore) * 100);
+
+  // Store results
+  setResults({
+    recommendedStream: highestStream,
+    score: percentageScore,
+    careers: careerMappings[highestStream].slice(0, 4),
+  });
+
+  setQuizScores(scores);
+
+  setTimeout(() => {
+    setLoading(false);
+    setShowResults(true);
+  }, 1500);
+};
+
+  const handleFinish = () => {
+    router.push('/dashboard');
+  };
+
+  const renderQuestion = () => {
+    const question = quizQuestions[currentQuestion];
+    return (
+    <div className="space-y-8" role="main" aria-live="polite">
+        {/* Language Toggle */}
+        <div className="flex justify-end">
+          <div className="inline-flex rounded-md shadow-sm" role="group" aria-label="Language selection">
+            <button
+              type="button"
+              onClick={() => changeLanguage('en')}
+              className={`px-4 py-2 text-sm font-medium rounded-l-lg ${currentLanguage === 'en' ? 'bg-teal-600 text-white' : 'bg-white text-gray-700 dark:bg-dark-700 dark:text-gray-200'} border border-gray-300 dark:border-gray-600 focus:z-10 focus:ring-2 focus:ring-teal-500 focus:text-teal-700`}
+              aria-pressed={currentLanguage === 'en'}
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  changeLanguage('en');
+                }
+              }}
+            >
+              English
+            </button>
+            <button
+              type="button"
+              onClick={() => changeLanguage('ur')}
+              className={`px-4 py-2 text-sm font-medium rounded-r-lg ${currentLanguage === 'ur' ? 'bg-teal-600 text-white' : 'bg-white text-gray-700 dark:bg-dark-700 dark:text-gray-200'} border border-gray-300 dark:border-gray-600 focus:z-10 focus:ring-2 focus:ring-teal-500 focus:text-teal-700`}
+              aria-pressed={currentLanguage === 'ur'}
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  changeLanguage('ur');
+                }
+              }}
+            >
+              اردو
+            </button>
+          </div>
+        </div>
+        
+        {/* Progress Bar */}
+        <div className="relative pt-1">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <span className="text-lg font-bold inline-block py-1 px-2 uppercase rounded-full text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/30">
+                {currentQuestion + 1} / {quizQuestions.length}
+              </span>
+            </div>
+            <div className="text-right">
+              <span className="text-sm font-semibold inline-block text-teal-600 dark:text-teal-400">
+                {Math.round(progressPercentage)}% Complete
+              </span>
+            </div>
+          </div>
+          <div className="overflow-hidden h-3 mb-4 text-xs flex rounded-full bg-teal-200 dark:bg-teal-900/30">
+            <motion.div 
+              initial={{ width: `${((currentQuestion) / quizQuestions.length) * 100}%` }}
+              animate={{ width: `${progressPercentage}%` }}
+              transition={{ duration: 0.5 }}
+              className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-teal-500 dark:bg-teal-600"
+            ></motion.div>
+          </div>
+        </div>
+
+        {/* Question Header */}
+        <div className="text-center mb-6">
+          <h2 id="question-heading" className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-[#3B3B3B] mb-3">
+            {question.question}
+          </h2>
+          {/* Text-to-speech controls */}
+          <button 
+            onClick={() => {
+              if (speechSynthesis) {
+                if (speaking) {
+                  speechSynthesis.cancel();
+                  setSpeaking(false);
+                } else {
+                  const utterance = new SpeechSynthesisUtterance(question.question);
+                  utterance.lang = currentLanguage === 'en' ? 'en-US' : 'ur-PK';
+                  utterance.onstart = () => setSpeaking(true);
+                  utterance.onend = () => setSpeaking(false);
+                  speechSynthesis.speak(utterance);
+                }
+              }
+            }}
+            className="inline-flex items-center justify-center p-2 rounded-full bg-teal-100 text-teal-700 hover:bg-teal-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors"
+            aria-label={speaking ? "Stop reading question" : "Read question aloud"}
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                if (speechSynthesis) {
+                  if (speaking) {
+                    speechSynthesis.cancel();
+                    setSpeaking(false);
+                  } else {
+                    const utterance = new SpeechSynthesisUtterance(question.question);
+                    utterance.lang = currentLanguage === 'en' ? 'en-US' : 'ur-PK';
+                    utterance.onstart = () => setSpeaking(true);
+                    utterance.onend = () => setSpeaking(false);
+                    speechSynthesis.speak(utterance);
+                  }
+                }
+              }
+            }}
+          >
+            {speaking ? (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 002 0V8a1 1 0 00-1-1zm4 0a1 1 0 00-1 1v4a1 1 0 002 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clipRule="evenodd" />
+              </svg>
+            )}
+          </button>
+        </div>
+
+        {/* Voice Input Controls */}
+        <div className="flex justify-center mb-6">
+          <button
+            onClick={toggleListening}
+            className={`inline-flex items-center justify-center px-4 py-2 rounded-full ${listening 
+              ? 'bg-red-100 text-red-700 hover:bg-red-200' 
+              : 'bg-blue-100 text-blue-700 hover:bg-blue-200'} 
+              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors`}
+            aria-label={listening ? "Stop listening" : "Answer by voice"}
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleListening();
+              }
+            }}
+          >
+            {listening ? (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 animate-pulse" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clipRule="evenodd" />
+                </svg>
+                Listening...
+              </>
+            ) : (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clipRule="evenodd" />
+                </svg>
+                Answer by voice
+              </>
+            )}
+          </button>
+        </div>
+        
+        {transcript && (
+          <div className="text-center mb-4">
+            <p className="text-sm text-gray-500">I heard: "{transcript}"</p>
+          </div>
+        )}
+        
+        {/* Answer Options */}
+        <div className="space-y-4" role="radiogroup" aria-labelledby="question-heading">
+          {question.options.map((option) => (
+            <motion.div 
+              key={option.id} 
+              className="relative"
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+            >
+              <button
+                type="button"
+                className={`w-full p-5 text-left border-2 rounded-xl transition-all ${answers[question.id] === option.id 
+                  ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/30 dark:border-teal-400 shadow-md' 
+                  : 'border-gray-300 hover:border-gray-400 dark:border-dark-300 dark:hover:border-dark-600'}`}
+                onClick={() => handleAnswer(question.id, option.id)}
+                onKeyDown={(e) => {
+                  // Handle keyboard navigation
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleAnswer(question.id, option.id);
+                  }
+                }}
+                aria-pressed={answers[question.id] === option.id}
+                tabIndex={0}
+                role="radio"
+                aria-checked={answers[question.id] === option.id}
+              >
+                <div className="flex items-start">
+                  <div className={`flex-shrink-0 h-6 w-6 mt-0.5 rounded-full border-2 ${answers[question.id] === option.id 
+                    ? 'bg-teal-500 border-teal-500 dark:bg-teal-400 dark:border-teal-400' 
+                    : 'border-gray-400 dark:border-dark-500'} flex items-center justify-center`}>
+                    {answers[question.id] === option.id && (
+                      <svg className="h-3 w-3 text-white dark:text-dark-900" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="ml-3">
+                    <span className="block text-lg font-bold text-gray-900 dark:text-[#3B3B3B] mb-1">{option.text}</span>
+                  </div>
+                </div>
+              </button>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Navigation Buttons */}
+        <div className="flex justify-between pt-8">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            type="button"
+            onClick={handlePrevious}
+            disabled={currentQuestion === 0}
+            className={`px-6 py-3 text-base font-medium rounded-lg flex items-center ${currentQuestion === 0 
+              ? 'bg-gray-200 text-gray-400 cursor-not-allowed dark:bg-gray-700 dark:text-[#3B3B3B]' 
+              : 'bg-white text-gray-700 hover:bg-gray-50 dark:bg-dark-700 dark:text-[#b3b0b0] dark:hover:bg-dark-600 border border-gray-300 dark:border-gray-600 shadow-sm'}`}
+            aria-label="Go to previous question"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                if (currentQuestion > 0) {
+                  handlePrevious();
+                }
+              }
+            }}
+          >
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Previous
+          </motion.button>
+          
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            type="button"
+            onClick={handleNext}
+            disabled={!answers[question.id]}
+            className={`px-6 py-3 text-base font-medium rounded-lg flex items-center ${!answers[question.id] 
+              ? 'bg-gray-300 cursor-not-allowed text-gray-500 dark:bg-gray-700 dark:text-[#3B3B3B]' 
+              : 'bg-teal-600 text-white hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-600 shadow-md'}`}
+            aria-label={currentQuestion < quizQuestions.length - 1 ? "Go to next question" : "Submit quiz answers"}
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                if (answers[question.id]) {
+                  handleNext();
+                }
+              }
+            }}
+          >
+            {currentQuestion < quizQuestions.length - 1 ? 'Next' : 'Submit'}
+            <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </motion.button>
+        </div>
+      </div>
+    );
+  };
+
+  const renderResults = () => {
+    if (!results) return null;
+
+    return (
+      <div className="space-y-8">
+        {/* Language Toggle */}
+        <div className="flex justify-end">
+          <div className="inline-flex rounded-md shadow-sm" role="group" aria-label="Language selection">
+            <button
+              type="button"
+              onClick={() => changeLanguage('en')}
+              className={`px-4 py-2 text-sm font-medium rounded-l-lg ${currentLanguage === 'en' ? 'bg-teal-600 text-white' : 'bg-white text-gray-700 dark:bg-dark-700 dark:text-gray-200'} border border-gray-300 dark:border-gray-600 focus:z-10 focus:ring-2 focus:ring-teal-500 focus:text-teal-700`}
+              aria-pressed={currentLanguage === 'en'}
+            >
+              English
+            </button>
+            <button
+              type="button"
+              onClick={() => changeLanguage('ur')}
+              className={`px-4 py-2 text-sm font-medium rounded-r-lg ${currentLanguage === 'ur' ? 'bg-teal-600 text-white' : 'bg-white text-gray-700 dark:bg-dark-700 dark:text-gray-200'} border border-gray-300 dark:border-gray-600 focus:z-10 focus:ring-2 focus:ring-teal-500 focus:text-teal-700`}
+              aria-pressed={currentLanguage === 'ur'}
+            >
+              اردو
+            </button>
+          </div>
+        </div>
+
+        {/* Results Header */}
+        <div className="text-center">
+          <span className="inline-block px-4 py-2 text-lg font-bold bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200 rounded-full mb-4">
+            Results
+          </span>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-[#3B3B3B] mb-2">
+            Your Recommended Stream
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-[#3B3B3B]">
+            Based on your answers, we've found the best match for your interests and strengths
+          </p>
+        </div>
+
+        {/* Use QuizResult component */}
+        <QuizResult 
+  scores={{
+    Medical: quizScores["Medical"],
+    "Non-Medical": quizScores["Non-Medical"],
+    Commerce: quizScores["Commerce"],
+    Arts: quizScores["Arts"],
+    Vocational: quizScores["Vocational"],
+  }}
+  onRetake={() => {
+    setShowResults(false);
+    setCurrentQuestion(0);
+    setAnswers({});
+  }}
+  onFinish={handleFinish}
+/>
+
+      </div>
+    );
+  };
+
+  const renderLoading = () => (
+    <div className="flex flex-col items-center justify-center py-16">
+      <div className="relative">
+        <div className="w-20 h-20 border-4 border-teal-200 border-t-teal-600 dark:border-teal-800 dark:border-t-teal-400 rounded-full animate-spin"></div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <svg className="w-8 h-8 text-teal-600 dark:text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          </svg>
+        </div>
+      </div>
+      <p className="mt-6 text-xl font-bold text-gray-700 dark:text-[#3B3B3B]">Analyzing your answers...</p>
+      <p className="mt-2 text-base text-gray-500 dark:text-[#4b4b4b]">We're finding the best career path for you</p>
+    </div>
+  );
+
+  return (
+    <DashboardLayout>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white dark:bg-[#FAF3E0] shadow-lg rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
+          <div className="px-4 py-5 sm:p-8">
+            {loading ? (
+              renderLoading()
+            ) : showResults ? (
+              renderResults()
+            ) : (
+              renderQuestion()
+            )}
+          </div>
+        </div>
+      </div>
+    </DashboardLayout>
+  );
+}
+
+// This is the main page component (server component)
+export default function QuizPage() {
+  return (
+    // Using Suspense to handle loading state
+    <Suspense fallback={<div className="flex justify-center items-center min-h-screen">Loading quiz...</div>}>
+      <QuizContent />
+    </Suspense>
+  );
+}

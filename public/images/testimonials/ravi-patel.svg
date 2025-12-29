@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0D9488;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#14B8A6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="url(#grad2)" />
+  <circle cx="100" cy="80" r="40" fill="#FFFFFF" opacity="0.9" />
+  <circle cx="100" cy="190" r="70" fill="#FFFFFF" opacity="0.9" />
+  <text x="100" y="95" font-family="Arial" font-size="40" font-weight="bold" text-anchor="middle" fill="#0D9488">RP</text>
+</svg>

@@ -1,0 +1,46 @@
+{
+  "app": {
+    "name": "Sheen Path",
+    "tagline": "Your One-Stop Personalized Career & Education Advisor"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "quiz": "Career Quiz",
+    "colleges": "College Directory",
+    "motivation": "Motivation",
+    "profile": "My Profile",
+    "notifications": "Notifications",
+    "logout": "Logout"
+  },
+  "auth": {
+    "login": "Login",
+    "signup": "Sign Up",
+    "email": "Email",
+    "phone": "Phone Number",
+    "password": "Password"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "language": {
+    "en": "English",
+    "hi": "Hindi",
+    "ur": "Urdu"
+  },
+  "offline": {
+    "title": "You are offline",
+    "description": "Your internet connection is currently unavailable. Some features may be limited.",
+    "available_features": "Available features:",
+    "feature_profile": "View Profile",
+    "feature_quiz": "Take Quiz",
+    "feature_colleges": "View Saved Colleges",
+    "try_again": "Try Again",
+    "reconnected": "You are back online!",
+    "redirecting": "Redirecting you to the home page..."
+  }
+}
