@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import DashboardLayout from '@/components/layout/DashboardLayout';
+// AppLayout is now provided globally via ConditionalLayout
 
 export default function ProfilePage() {
   // Mock user data
@@ -19,7 +19,7 @@ export default function ProfilePage() {
   });
 
   return (
-    <DashboardLayout>
+    <>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="md:flex md:items-center md:justify-between mb-6">
           <div className="flex-1 min-w-0">
@@ -177,6 +177,6 @@ export default function ProfilePage() {
           </Link>
         </div>
       </div>
-    </DashboardLayout>
+    </>
   );
 }
