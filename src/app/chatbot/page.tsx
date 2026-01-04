@@ -13,44 +13,60 @@ export default function ChatbotPage() {
     ]);
     const [inputMessage, setInputMessage] = useState('');
     const [isTyping, setIsTyping] = useState(false);
+    const [blindMode, setBlindMode] = useState(false);
 
     // Sample responses - in production, this would connect to an AI API
-    const getBotResponse = (userMessage: string): string => {
-        const lowerMessage = userMessage.toLowerCase();
+    const fetchBotResponse = async (message: string): Promise<string> => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_CHATBOT_API}/chat`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            // add later if you enable API key
+            "x-api-key": process.env.NEXT_PUBLIC_CHATBOT_KEY!
+        },
+        body: JSON.stringify({
+        message,
+        blind: blindMode
+        })
+    });
 
-        if (lowerMessage.includes('what') && lowerMessage.includes('onoe')) {
-            return "One Nation One Election (ONOE) refers to the idea of holding simultaneous elections to the Lok Sabha (Parliament) and all State Legislative Assemblies across India. Currently, elections are held separately at different times.";
-        } else if (lowerMessage.includes('history') || lowerMessage.includes('when')) {
-            return "India actually had simultaneous elections from 1951 to 1967. The cycle broke due to premature dissolution of some state assemblies and the Lok Sabha. The idea has been revived in recent years with reports from the Law Commission and NITI Aayog.";
-        } else if (lowerMessage.includes('benefit') || lowerMessage.includes('advantage')) {
-            return "Proponents argue that ONOE could: 1) Reduce election costs significantly, 2) Allow for more continuous governance by reducing the frequency of the Model Code of Conduct, and 3) Improve administrative efficiency by consolidating resources.";
-        } else if (lowerMessage.includes('concern') || lowerMessage.includes('problem') || lowerMessage.includes('challenge')) {
-            return "Critics raise several concerns: 1) It could undermine India's federal structure by reducing focus on state-specific issues, 2) Managing simultaneous elections across India presents enormous logistical challenges, and 3) Less frequent elections could reduce democratic accountability.";
-        } else if (lowerMessage.includes('constitution') || lowerMessage.includes('legal') || lowerMessage.includes('law')) {
-            return "The Indian Constitution doesn't explicitly mandate or prohibit simultaneous elections. Articles 83 and 172 specify the five-year term for Lok Sabha and State Assemblies. Implementing ONOE would likely require constitutional amendments, particularly regarding dissolution of assemblies and handling of hung assemblies.";
-        } else if (lowerMessage.includes('cost') || lowerMessage.includes('money') || lowerMessage.includes('expensive')) {
-            return "While ONOE may reduce election costs, the exact savings are debated. Some claim savings of ₹1 lakh crore annually, but independent estimates suggest the actual savings would likely be lower. The Election Commission's expenditure varies significantly between elections.";
-        } else {
-            return "That's an interesting question! For detailed information, I recommend checking our Learning Modules or Fact-Checking sections. You can also ask me about specific aspects like history, benefits, concerns, or constitutional aspects of ONOE.";
-        }
+    if (!res.ok) {
+        throw new Error("Backend error");
+    }
+
+    const data = await res.json();
+    return data.reply;
     };
 
-    const handleSendMessage = () => {
-        if (!inputMessage.trim()) return;
 
-        // Add user message
-        const userMsg = { role: 'user' as const, content: inputMessage };
-        setMessages([...messages, userMsg]);
-        setInputMessage('');
-        setIsTyping(true);
+    const handleSendMessage = async () => {
+    if (!inputMessage.trim()) return;
 
-        // Simulate bot response delay
-        setTimeout(() => {
-            const botResponse = getBotResponse(inputMessage);
-            setMessages(prev => [...prev, { role: 'bot', content: botResponse }]);
-            setIsTyping(false);
-        }, 1000);
+    const userMsg = { role: 'user' as const, content: inputMessage };
+    setMessages(prev => [...prev, userMsg]);
+    setInputMessage('');
+    setIsTyping(true);
+
+    try {
+        const reply = await fetchBotResponse(userMsg.content);
+
+        setMessages(prev => [
+            ...prev,
+            { role: 'bot', content: reply }
+        ]);
+    } catch (error) {
+        setMessages(prev => [
+            ...prev,
+            {
+                role: 'bot',
+                content: "⚠️ I'm having trouble connecting to the server. Please try again."
+            }
+        ]);
+    } finally {
+        setIsTyping(false);
+    }
     };
+
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -142,6 +158,10 @@ export default function ChatbotPage() {
                 <div className="bg-white dark:bg-dark-800 border-t border-slate-200 dark:border-dark-700 p-6">
                     <div className="max-w-4xl mx-auto">
                         <div className="flex space-x-3">
+                            <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                <input type="checkbox" checked={blindMode} onChange={() => setBlindMode(!blindMode)} />
+                                    Blind Mode
+                            </label>
                             <textarea
                                 value={inputMessage}
                                 onChange={(e) => setInputMessage(e.target.value)}
@@ -163,9 +183,6 @@ export default function ChatbotPage() {
                                 </svg>
                             </button>
                         </div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                            Note: This is a demo chatbot with pre-programmed responses. In production, it would connect to an AI service.
-                        </p>
                     </div>
                 </div>
             </div>
