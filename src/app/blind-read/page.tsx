@@ -79,12 +79,12 @@ export default function BlindReadPage() {
 
     return (
         <>
-            <div className="min-h-screen bg-gradient-to-b from-white to-slate-50 dark:from-dark-900 dark:to-dark-800 py-12">
+            <div className="min-h-screen bg-gray-50 dark:bg-dark-900 py-12">
                 <div className="container mx-auto px-4 max-w-6xl">
                     {/* Header */}
                     <div className="text-center mb-8">
                         <div className="text-5xl mb-4">🕶️</div>
-                        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-800 dark:text-dark-50">
+                        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-dark-50">
                             Blind Reading Mode
                         </h1>
                         <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
@@ -94,29 +94,29 @@ export default function BlindReadPage() {
 
                     {/* Info Box */}
                     <div className="mb-8 max-w-4xl mx-auto">
-                        <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-6">
-                            <h3 className="font-bold text-purple-900 dark:text-purple-100 mb-2">How it works:</h3>
-                            <ul className="space-y-2 text-sm text-purple-800 dark:text-purple-200">
+                        <div className="bg-white dark:bg-dark-800 border border-primary-200 dark:border-primary-800 rounded-lg p-6 shadow-sm">
+                            <h3 className="font-bold text-primary-700 dark:text-primary-300 mb-2">How it works:</h3>
+                            <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
                                 <li className="flex items-start">
-                                    <svg className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <svg className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                     </svg>
                                     <span>Paste or type any article, news snippet, or text about ONOE</span>
                                 </li>
                                 <li className="flex items-start">
-                                    <svg className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <svg className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                     </svg>
                                     <span>Click "Enable Blind Read" to anonymize party and leader names</span>
                                 </li>
                                 <li className="flex items-start">
-                                    <svg className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <svg className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                     </svg>
                                     <span>Read the content without knowing which parties or leaders are mentioned</span>
                                 </li>
                                 <li className="flex items-start">
-                                    <svg className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <svg className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                     </svg>
                                     <span>Focus on the arguments and facts, not your existing opinions about specific parties</span>
@@ -132,7 +132,7 @@ export default function BlindReadPage() {
                             animate={{ opacity: 1, y: 0 }}
                             className="max-w-4xl mx-auto"
                         >
-                            <div className="bg-white dark:bg-dark-800 rounded-xl shadow-lg p-8 border border-slate-100 dark:border-dark-700">
+                            <div className="bg-white dark:bg-dark-800 rounded-xl shadow-card p-8 border border-gray-100 dark:border-dark-700">
                                 <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-dark-50">
                                     Paste Your Text
                                 </h2>
@@ -142,13 +142,13 @@ export default function BlindReadPage() {
                                     onChange={(e) => setInputText(e.target.value)}
                                     placeholder="Paste an article, news snippet, or any text about ONOE here..."
                                     rows={12}
-                                    className="w-full px-4 py-3 border border-slate-300 dark:border-dark-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-dark-700 dark:text-dark-50 resize-none mb-4"
+                                    className="w-full px-4 py-3 border border-gray-300 dark:border-dark-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-dark-700 dark:text-dark-50 resize-none mb-4"
                                 />
 
                                 <div className="flex items-center justify-between">
                                     <button
                                         onClick={() => setInputText(sampleText)}
-                                        className="text-sm text-purple-600 dark:text-purple-400 hover:underline"
+                                        className="text-sm text-primary-600 dark:text-primary-400 hover:underline"
                                     >
                                         Load Sample Text
                                     </button>
@@ -157,7 +157,7 @@ export default function BlindReadPage() {
                                         onClick={handleEnableBlindRead}
                                         disabled={!inputText.trim()}
                                         className={`px-6 py-3 rounded-lg font-medium transition-all ${inputText.trim()
-                                                ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800'
+                                                ? 'bg-primary-600 text-white hover:bg-primary-700'
                                                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                             }`}
                                     >
@@ -173,30 +173,30 @@ export default function BlindReadPage() {
                             animate={{ opacity: 1, y: 0 }}
                             className="max-w-4xl mx-auto"
                         >
-                            <div className="bg-purple-50 dark:bg-purple-900/20 rounded-xl shadow-lg p-6 border border-purple-200 dark:border-purple-800">
+                            <div className="bg-white dark:bg-dark-800 rounded-xl shadow-card p-6 border border-gray-200 dark:border-dark-700">
                                 <div className="flex items-center justify-between mb-4">
-                                    <h2 className="text-xl font-bold text-purple-900 dark:text-purple-100">
+                                    <h2 className="text-xl font-bold text-gray-900 dark:text-dark-50">
                                         Blind Read Version
                                     </h2>
-                                    <span className="px-3 py-1 bg-purple-200 dark:bg-purple-800 text-purple-800 dark:text-purple-200 text-sm rounded-full">
+                                    <span className="px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 text-sm rounded-full font-medium">
                                         Anonymized
                                     </span>
                                 </div>
                                 <div className="prose dark:prose-invert max-w-none">
-                                    <p className="text-purple-900 dark:text-purple-100 whitespace-pre-wrap leading-relaxed">
+                                    <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">
                                         {anonymizedText}
                                     </p>
                                 </div>
                                 <div className="mt-6 flex justify-end space-x-3">
                                     <button
                                         onClick={handleCopyText}
-                                        className="px-4 py-2 rounded-lg bg-purple-600 text-white font-medium hover:bg-purple-700 transition-all"
+                                        className="px-4 py-2 rounded-lg bg-primary-600 text-white font-medium hover:bg-primary-700 transition-all"
                                     >
                                         Copy
                                     </button>
                                     <button
                                         onClick={() => setBlindReadEnabled(false)}
-                                        className="px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-200 dark:hover:bg-slate-600 transition-all"
+                                        className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-all"
                                     >
                                         Disable Blind Read
                                     </button>

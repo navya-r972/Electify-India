@@ -64,7 +64,7 @@ export default function OfflinePage() {
     <>
       <I18nClientInit />
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 px-4">
-        <div className="max-w-md w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 text-center">
+        <div className="max-w-md w-full bg-white dark:bg-gray-800 shadow-card rounded-lg p-8 text-center">
         {isOnline ? (
           // Online state - show reconnected message
           <div className="py-8">
@@ -126,7 +126,7 @@ export default function OfflinePage() {
               <ul className="text-left text-sm text-gray-600 dark:text-gray-300 space-y-2 mb-6">
                 <li className="flex items-center">
                   <svg
-                    className="h-5 w-5 text-green-500 mr-2"
+                    className="h-5 w-5 text-green-600 mr-2"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -143,7 +143,7 @@ export default function OfflinePage() {
                 </li>
                 <li className="flex items-center">
                   <svg
-                    className="h-5 w-5 text-green-500 mr-2"
+                    className="h-5 w-5 text-green-600 mr-2"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -160,7 +160,7 @@ export default function OfflinePage() {
                 </li>
                 <li className="flex items-center">
                   <svg
-                    className="h-5 w-5 text-green-500 mr-2"
+                    className="h-5 w-5 text-green-600 mr-2"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -180,7 +180,7 @@ export default function OfflinePage() {
             <div className="mt-6">
               <button
                 onClick={() => window.location.reload()}
-                className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-500 hover:bg-rust-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
               >
                 {tSafe('offline.try_again', 'Try Again')}
               </button>

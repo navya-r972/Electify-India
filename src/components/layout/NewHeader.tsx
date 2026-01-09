@@ -39,7 +39,7 @@ export default function NewHeader() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-gray-800 dark:text-white hover:text-green-600 dark:hover:text-green-500 px-3 py-2 text-sm font-medium"
+                  className="text-charcoal-800 dark:text-white hover:text-primary-600 dark:hover:text-primary-500 px-3 py-2 text-sm font-medium transition-colors"
                 >
                   {link.label}
                 </a>
@@ -47,7 +47,7 @@ export default function NewHeader() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-gray-800 dark:text-white hover:text-green-600 dark:hover:text-green-500 px-3 py-2 text-sm font-medium"
+                  className="text-charcoal-800 dark:text-white hover:text-primary-600 dark:hover:text-primary-500 px-3 py-2 text-sm font-medium transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -62,13 +62,13 @@ export default function NewHeader() {
             <div className="flex items-center space-x-3">
               <Link
                 href="/login"
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:bg-green-700 dark:hover:bg-green-600"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:bg-primary-700 dark:hover:bg-primary-600 transition-colors shadow-sm"
               >
                 Login
               </Link>
               <Link
                 href="/signup"
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-green-600 dark:text-green-400 bg-white dark:bg-dark-700 border-green-600 dark:border-green-500 hover:bg-green-50 dark:hover:bg-dark-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                className="inline-flex items-center px-4 py-2 border border-primary-600 dark:border-primary-500 text-sm font-medium rounded-md text-primary-600 dark:text-primary-400 bg-white dark:bg-dark-700 hover:bg-primary-50 dark:hover:bg-dark-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors shadow-sm"
               >
                 Sign&nbsp;Up
               </Link>
@@ -79,7 +79,7 @@ export default function NewHeader() {
           <div className="flex md:hidden">
             <button
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-dark-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-dark-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
             >
               <span className="sr-only">Open main menu</span>
               <svg
@@ -106,7 +106,7 @@ export default function NewHeader() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsMenuOpen(false)}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-white hover:text-green-600 dark:hover:text-green-500 hover:bg-gray-50 dark:hover:bg-dark-800"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-white hover:text-primary-600 dark:hover:text-primary-500 hover:bg-gray-50 dark:hover:bg-dark-800"
                   >
                     {link.label}
                   </a>
@@ -116,7 +116,7 @@ export default function NewHeader() {
                     href={link.href}
                     scroll={false}
                     onClick={() => setIsMenuOpen(false)}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-white hover:text-green-600 dark:hover:text-green-500 hover:bg-gray-50 dark:hover:bg-dark-800"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-white hover:text-primary-600 dark:hover:text-primary-500 hover:bg-gray-50 dark:hover:bg-dark-800"
                   >
                     {link.label}
                   </Link>
@@ -130,13 +130,13 @@ export default function NewHeader() {
               <div className="flex flex-col space-y-2 px-3 py-2">
                 <Link
                   href="/login"
-                  className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:bg-green-700 dark:hover:bg-green-600"
+                  className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:bg-primary-700 dark:hover:bg-primary-600"
                 >
                   Login
                 </Link>
                 <Link
                   href="/signup"
-                  className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-green-600 dark:text-green-400 bg-white dark:bg-dark-700 border-green-600 dark:border-green-500 hover:bg-green-50 dark:hover:bg-dark-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                  className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-primary-600 dark:text-primary-400 bg-white dark:bg-dark-700 border-primary-600 dark:border-primary-500 hover:bg-primary-50 dark:hover:bg-dark-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                 >
                   Sign&nbsp;Up
                 </Link>

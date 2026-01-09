@@ -13,25 +13,78 @@ export default function ChatbotPage() {
     ]);
     const [inputMessage, setInputMessage] = useState('');
     const [isTyping, setIsTyping] = useState(false);
+    const [isListening, setIsListening] = useState(false);
+
+    const handleVoiceInput = () => {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            alert("Voice input is not supported in this browser.");
+            return;
+        }
+
+        // @ts-ignore
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.onstart = () => {
+            setIsListening(true);
+        };
+
+        recognition.onend = () => {
+            setIsListening(false);
+        };
+
+        recognition.onresult = (event: any) => {
+            const transcript = event.results[0][0].transcript;
+            setInputMessage(transcript);
+        };
+
+        recognition.start();
+    };
+
+    const renderText = (text: string) => {
+        const parts = text.split(/(\*\*.*?\*\*)/g);
+        return parts.map((part, index) => {
+            if (part.startsWith('**') && part.endsWith('**')) {
+                return <strong key={index} className="font-bold text-blue-900 dark:text-blue-300">{part.slice(2, -2)}</strong>;
+            }
+            return part;
+        });
+    };
+
+    const formatMessage = (content: string) => {
+        const lines = content.split('\n');
+        return lines.map((line, i) => {
+            if (line.trim().startsWith('- ')) {
+                return <div key={i} className="flex items-start ml-2 mb-1"><span className="mr-2">•</span><span>{renderText(line.trim().substring(2))}</span></div>;
+            }
+            if (line.trim() === '') {
+                return <div key={i} className="h-2"></div>;
+            }
+            return <p key={i} className="mb-1">{renderText(line)}</p>;
+        });
+    };
 
     // Sample responses - in production, this would connect to an AI API
     const getBotResponse = (userMessage: string): string => {
         const lowerMessage = userMessage.toLowerCase();
 
         if (lowerMessage.includes('what') && lowerMessage.includes('onoe')) {
-            return "One Nation One Election (ONOE) refers to the idea of holding simultaneous elections to the Lok Sabha (Parliament) and all State Legislative Assemblies across India. Currently, elections are held separately at different times.";
+            return "**One Nation One Election (ONOE)** refers to the idea of holding simultaneous elections to the **Lok Sabha** (Parliament) and all **State Legislative Assemblies** across India.\n\nCurrently, elections are held separately at different times.";
         } else if (lowerMessage.includes('history') || lowerMessage.includes('when')) {
-            return "India actually had simultaneous elections from 1951 to 1967. The cycle broke due to premature dissolution of some state assemblies and the Lok Sabha. The idea has been revived in recent years with reports from the Law Commission and NITI Aayog.";
+            return "India actually had simultaneous elections from **1951 to 1967**.\n\nThe cycle broke due to premature dissolution of some state assemblies and the Lok Sabha. The idea has been revived in recent years with reports from the **Law Commission** and **NITI Aayog**.";
         } else if (lowerMessage.includes('benefit') || lowerMessage.includes('advantage')) {
-            return "Proponents argue that ONOE could: 1) Reduce election costs significantly, 2) Allow for more continuous governance by reducing the frequency of the Model Code of Conduct, and 3) Improve administrative efficiency by consolidating resources.";
+            return "Proponents argue that ONOE could:\n- **Reduce election costs** significantly\n- **Allow for more continuous governance** by reducing the frequency of the Model Code of Conduct\n- **Improve administrative efficiency** by consolidating resources.";
         } else if (lowerMessage.includes('concern') || lowerMessage.includes('problem') || lowerMessage.includes('challenge')) {
-            return "Critics raise several concerns: 1) It could undermine India's federal structure by reducing focus on state-specific issues, 2) Managing simultaneous elections across India presents enormous logistical challenges, and 3) Less frequent elections could reduce democratic accountability.";
+            return "Critics raise several concerns:\n- **Federal Structure:** It could undermine India's federal structure by reducing focus on state-specific issues.\n- **Logistics:** Managing simultaneous elections across India presents enormous logistical challenges.\n- **Accountability:** Less frequent elections could reduce democratic accountability.";
         } else if (lowerMessage.includes('constitution') || lowerMessage.includes('legal') || lowerMessage.includes('law')) {
-            return "The Indian Constitution doesn't explicitly mandate or prohibit simultaneous elections. Articles 83 and 172 specify the five-year term for Lok Sabha and State Assemblies. Implementing ONOE would likely require constitutional amendments, particularly regarding dissolution of assemblies and handling of hung assemblies.";
+            return "The Indian Constitution doesn't explicitly mandate or prohibit simultaneous elections.\n\n**Articles 83 and 172** specify the five-year term for Lok Sabha and State Assemblies. Implementing ONOE would likely require constitutional amendments, particularly regarding dissolution of assemblies and handling of hung assemblies.";
         } else if (lowerMessage.includes('cost') || lowerMessage.includes('money') || lowerMessage.includes('expensive')) {
-            return "While ONOE may reduce election costs, the exact savings are debated. Some claim savings of ₹1 lakh crore annually, but independent estimates suggest the actual savings would likely be lower. The Election Commission's expenditure varies significantly between elections.";
+            return "While ONOE may reduce election costs, the exact savings are debated.\n\n- Some claim savings of **₹1 lakh crore** annually.\n- Independent estimates suggest the actual savings would likely be lower.\n- The Election Commission's expenditure varies significantly between elections.";
         } else {
-            return "That's an interesting question! For detailed information, I recommend checking our Learning Modules or Fact-Checking sections. You can also ask me about specific aspects like history, benefits, concerns, or constitutional aspects of ONOE.";
+            return "That's an interesting question! For detailed information, I recommend checking our **Learning Modules** or **Fact-Checking** sections.\n\nYou can also ask me about specific aspects like:\n- History of ONOE\n- Benefits\n- Concerns\n- Constitutional aspects";
         }
     };
 
@@ -68,11 +121,11 @@ export default function ChatbotPage() {
 
   return (
     <>
-            <div className="h-screen flex flex-col bg-gradient-to-b from-white to-slate-50 dark:from-dark-900 dark:to-dark-800">
+            <div className="h-screen flex flex-col bg-gray-50 dark:bg-dark-900">
                 {/* Header */}
-                <div className="bg-white dark:bg-dark-800 border-b border-slate-200 dark:border-dark-700 p-6">
+                <div className="bg-white dark:bg-dark-800 border-b border-gray-200 dark:border-dark-700 p-6 shadow-sm">
                     <div className="max-w-4xl mx-auto">
-                        <h1 className="text-3xl font-bold text-gray-800 dark:text-dark-50 mb-2">
+                        <h1 className="text-3xl font-bold text-gray-900 dark:text-dark-50 mb-2">
                             ONOE Chatbot Assistant
                         </h1>
                         <p className="text-gray-600 dark:text-gray-300">
@@ -92,12 +145,12 @@ export default function ChatbotPage() {
                                 className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                             >
                                 <div
-                                    className={`max-w-[80%] rounded-lg p-4 ${message.role === 'user'
-                                            ? 'bg-blue-600 text-white'
-                                            : 'bg-white dark:bg-dark-800 text-gray-800 dark:text-dark-50 border border-slate-200 dark:border-dark-700'
+                                    className={`max-w-[80%] rounded-2xl p-4 shadow-sm ${message.role === 'user'
+                                            ? 'bg-primary-600 text-white rounded-tr-sm'
+                                            : 'bg-white dark:bg-dark-800 text-gray-800 dark:text-dark-50 border border-gray-200 dark:border-dark-700 rounded-tl-sm'
                                         }`}
                                 >
-                                    <p className="whitespace-pre-wrap">{message.content}</p>
+                                    <div className="text-sm md:text-base">{formatMessage(message.content)}</div>
                                 </div>
                             </motion.div>
                         ))}
@@ -108,7 +161,7 @@ export default function ChatbotPage() {
                                 animate={{ opacity: 1 }}
                                 className="flex justify-start"
                             >
-                                <div className="bg-white dark:bg-dark-800 rounded-lg p-4 border border-slate-200 dark:border-dark-700">
+                                <div className="bg-white dark:bg-dark-800 rounded-lg p-4 border border-gray-200 dark:border-dark-700">
                                     <div className="flex space-x-2">
                                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
                                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
@@ -139,9 +192,23 @@ export default function ChatbotPage() {
                 </div>
 
                 {/* Input Area */}
-                <div className="bg-white dark:bg-dark-800 border-t border-slate-200 dark:border-dark-700 p-6">
+                <div className="bg-white dark:bg-dark-800 border-t border-gray-200 dark:border-dark-700 p-6">
                     <div className="max-w-4xl mx-auto">
                         <div className="flex space-x-3">
+                            <button
+                                onClick={handleVoiceInput}
+                                className={`p-3 rounded-lg transition-all ${
+                                    isListening 
+                                    ? 'bg-red-500 text-white animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.7)]' 
+                                    : 'bg-gray-100 dark:bg-dark-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-dark-600'
+                                }`}
+                                title="Voice Input"
+                                aria-label="Voice Input"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clipRule="evenodd" />
+                                </svg>
+                            </button>
                             <textarea
                                 value={inputMessage}
                                 onChange={(e) => setInputMessage(e.target.value)}

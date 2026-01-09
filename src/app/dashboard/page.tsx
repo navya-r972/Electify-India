@@ -31,10 +31,10 @@ export default function DashboardPage() {
       <div className="p-6 md:p-8 max-w-7xl mx-auto">
         {/* Welcome Header */}
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-dark-50 mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900 dark:text-dark-50 mb-2">
             Welcome back! 👋
           </h1>
-          <p className="text-gray-600 dark:text-gray-300">
+          <p className="text-charcoal-600 dark:text-gray-300">
             Continue your journey to understanding One Nation One Election
           </p>
         </div>
@@ -47,9 +47,9 @@ export default function DashboardPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white dark:bg-dark-800 rounded-xl shadow-lg p-6 border border-slate-100 dark:border-dark-700"
+              className="bg-white dark:bg-dark-800 rounded-xl shadow-card p-6 border border-slate-100 dark:border-dark-700"
             >
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-dark-50 mb-6">
+              <h2 className="text-2xl font-bold text-charcoal-900 dark:text-dark-50 mb-6">
                 Your Learning Progress
               </h2>
 
@@ -59,15 +59,15 @@ export default function DashboardPage() {
                   <div className="text-3xl font-bold text-green-600 dark:text-green-400">
                     {learningProgress.completed}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                  <div className="text-sm text-charcoal-600 dark:text-gray-300 mt-1">
                     Completed
                   </div>
                 </div>
-                <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                <div className="text-center p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg border border-primary-200 dark:border-primary-800">
+                  <div className="text-3xl font-bold text-primary-600 dark:text-primary-400">
                     {learningProgress.inProgress}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                  <div className="text-sm text-charcoal-600 dark:text-gray-300 mt-1">
                     In Progress
                   </div>
                 </div>
@@ -75,7 +75,7 @@ export default function DashboardPage() {
                   <div className="text-3xl font-bold text-slate-600 dark:text-slate-400">
                     {learningProgress.total}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                  <div className="text-sm text-charcoal-600 dark:text-gray-300 mt-1">
                     Total Topics
                   </div>
                 </div>
@@ -83,7 +83,7 @@ export default function DashboardPage() {
 
               {/* Progress Bar */}
               <div className="mb-4">
-                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-300 mb-2">
+                <div className="flex justify-between text-sm text-charcoal-600 dark:text-gray-300 mb-2">
                   <span>Overall Progress</span>
                   <span className="font-semibold">{Math.round(progressPercentage)}%</span>
                 </div>
@@ -92,14 +92,14 @@ export default function DashboardPage() {
                     initial={{ width: 0 }}
                     animate={{ width: `${progressPercentage}%` }}
                     transition={{ duration: 1, ease: "easeOut" }}
-                    className="bg-gradient-to-r from-blue-500 to-teal-500 h-3 rounded-full"
+                    className="bg-primary-600 h-3 rounded-full"
                   />
                 </div>
               </div>
 
               <Link
                 href="/learn"
-                className="block w-full text-center py-3 px-4 bg-gradient-to-r from-blue-600 to-teal-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-teal-700 transition-all shadow-md hover:shadow-lg"
+                className="block w-full text-center py-3 px-4 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-all shadow-sm hover:shadow-md"
               >
                 Continue Learning →
               </Link>
@@ -110,26 +110,26 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl shadow-lg p-6 border border-purple-200 dark:border-purple-800"
+              className="bg-white dark:bg-dark-800 rounded-xl shadow-card p-6 border border-primary-100 dark:border-primary-900/20"
             >
-              <h3 className="text-xl font-bold text-gray-800 dark:text-dark-50 mb-3">
+              <h3 className="text-xl font-bold text-charcoal-900 dark:text-dark-50 mb-3">
                 📖 Resume Where You Left Off
               </h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">
+              <p className="text-charcoal-600 dark:text-gray-300 mb-4">
                 Module 4: Potential Benefits of ONOE
               </p>
               <div className="flex items-center space-x-3">
                 <Link
                   href="/learn"
-                  className="px-6 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors"
+                  className="px-6 py-2 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
                 >
                   Resume
                 </Link>
                 <Link
-                  href="/quiz"
-                  className="px-6 py-2 bg-white dark:bg-dark-700 text-purple-600 dark:text-purple-400 border-2 border-purple-600 dark:border-purple-400 rounded-lg font-medium hover:bg-purple-50 dark:hover:bg-dark-600 transition-colors"
+                  href="/knowledge-check"
+                  className="px-6 py-2 bg-white dark:bg-dark-700 text-primary-600 dark:text-primary-400 border-2 border-primary-600 dark:border-primary-400 rounded-lg font-medium hover:bg-primary-50 dark:hover:bg-dark-600 transition-colors"
                 >
-                  Take Quiz
+                  Knowledge Check
                 </Link>
               </div>
             </motion.div>
@@ -139,15 +139,15 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white dark:bg-dark-800 rounded-xl shadow-lg p-6 border border-slate-100 dark:border-dark-700"
+              className="bg-white dark:bg-dark-800 rounded-xl shadow-card p-6 border border-slate-100 dark:border-dark-700"
             >
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-dark-50">
+                <h2 className="text-2xl font-bold text-charcoal-900 dark:text-dark-50">
                   Recently Viewed
                 </h2>
                 <Link
                   href="/saved"
-                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                  className="text-sm text-primary-600 dark:text-primary-400 hover:underline"
                 >
                   View All →
                 </Link>
@@ -160,15 +160,15 @@ export default function DashboardPage() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.3 + index * 0.1 }}
-                    className="p-4 bg-slate-50 dark:bg-dark-700 rounded-lg border border-slate-200 dark:border-dark-600 hover:border-blue-400 dark:hover:border-blue-500 transition-colors cursor-pointer"
+                    className="p-4 bg-white dark:bg-dark-700 rounded-lg border border-slate-200 dark:border-dark-600 hover:border-primary-400 dark:hover:border-primary-500 transition-colors cursor-pointer"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="font-semibold text-gray-800 dark:text-dark-50 mb-1">
+                        <h3 className="font-semibold text-charcoal-900 dark:text-dark-50 mb-1">
                           {item.title}
                         </h3>
                         <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                          <span className="px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded">
+                          <span className="px-2 py-0.5 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 rounded">
                             {item.type}
                           </span>
                           <span>•</span>
@@ -192,41 +192,51 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-white dark:bg-dark-800 rounded-xl shadow-lg p-6 border border-slate-100 dark:border-dark-700"
+              className="bg-white dark:bg-dark-800 rounded-xl shadow-card p-6 border border-slate-100 dark:border-dark-700"
             >
-              <h2 className="text-xl font-bold text-gray-800 dark:text-dark-50 mb-4">
+              <h2 className="text-xl font-bold text-charcoal-900 dark:text-dark-50 mb-4">
                 Quick Actions
               </h2>
 
               <div className="space-y-3">
                 <Link
-                  href="/fact-check"
-                  className="flex items-center space-x-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                  href="/fact-vs-myth"
+                  className="flex items-center space-x-3 p-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg border border-primary-200 dark:border-primary-800 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors"
                 >
-                  <svg className="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-6 w-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                  <span className="font-medium text-primary-800 dark:text-primary-300">Fact vs Myth</span>
+                </Link>
+
+                <Link
+                  href="/fact-check"
+                  className="flex items-center space-x-3 p-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg border border-primary-200 dark:border-primary-800 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors"
+                >
+                  <svg className="h-6 w-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span className="font-medium text-blue-800 dark:text-blue-300">Check a Fact</span>
+                  <span className="font-medium text-primary-800 dark:text-primary-300">Check a Fact</span>
                 </Link>
 
                 <Link
                   href="/blind-read"
-                  className="flex items-center space-x-3 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800 hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
+                  className="flex items-center space-x-3 p-3 bg-secondary-50 dark:bg-secondary-900/20 rounded-lg border border-secondary-200 dark:border-secondary-800 hover:bg-secondary-100 dark:hover:bg-secondary-900/30 transition-colors"
                 >
-                  <svg className="h-6 w-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-6 w-6 text-secondary-600 dark:text-secondary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                   </svg>
-                  <span className="font-medium text-purple-800 dark:text-purple-300">Use Blind Read</span>
+                  <span className="font-medium text-secondary-800 dark:text-secondary-300">Use Blind Read</span>
                 </Link>
 
                 <Link
                   href="/chatbot"
-                  className="flex items-center space-x-3 p-3 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-200 dark:border-teal-800 hover:bg-teal-100 dark:hover:bg-teal-900/30 transition-colors"
+                  className="flex items-center space-x-3 p-3 bg-accent-50 dark:bg-accent-900/20 rounded-lg border border-accent-200 dark:border-accent-800 hover:bg-accent-100 dark:hover:bg-accent-900/30 transition-colors"
                 >
-                  <svg className="h-6 w-6 text-teal-600 dark:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-6 w-6 text-accent-600 dark:text-accent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                   </svg>
-                  <span className="font-medium text-teal-800 dark:text-teal-300">Ask Chatbot</span>
+                  <span className="font-medium text-accent-800 dark:text-accent-300">Ask Chatbot</span>
                 </Link>
               </div>
             </motion.div>
@@ -235,31 +245,31 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-white dark:bg-dark-800 rounded-xl shadow-lg p-6 border border-slate-100 dark:border-dark-700"
+              className="bg-white dark:bg-dark-800 rounded-xl shadow-card p-6 border border-slate-100 dark:border-dark-700"
             >
-              <h2 className="text-xl font-bold text-gray-800 dark:text-dark-50 mb-4">
+              <h2 className="text-xl font-bold text-charcoal-900 dark:text-dark-50 mb-4">
                 Your Preferences
               </h2>
 
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <svg className="h-5 w-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="h-5 w-5 text-charcoal-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
                     </svg>
-                    <span className="text-gray-700 dark:text-gray-300">Language</span>
+                    <span className="text-charcoal-700 dark:text-gray-300">Language</span>
                   </div>
-                  <span className="font-semibold text-gray-800 dark:text-dark-50">
+                  <span className="font-semibold text-charcoal-900 dark:text-dark-50">
                     {preferences.language}
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <svg className="h-5 w-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="h-5 w-5 text-charcoal-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                     </svg>
-                    <span className="text-gray-700 dark:text-gray-300">Audio</span>
+                    <span className="text-charcoal-700 dark:text-gray-300">Audio</span>
                   </div>
                   <span className={`px-2 py-1 rounded text-sm font-medium ${preferences.audioEnabled ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}`}>
                     {preferences.audioEnabled ? 'Enabled' : 'Disabled'}
@@ -268,12 +278,12 @@ export default function DashboardPage() {
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <svg className="h-5 w-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="h-5 w-5 text-charcoal-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                     </svg>
-                    <span className="text-gray-700 dark:text-gray-300">Blind Read</span>
+                    <span className="text-charcoal-700 dark:text-gray-300">Blind Read</span>
                   </div>
-                  <span className={`px-2 py-1 rounded text-sm font-medium ${preferences.blindReadEnabled ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}`}>
+                  <span className={`px-2 py-1 rounded text-sm font-medium ${preferences.blindReadEnabled ? 'bg-secondary-100 text-secondary-800 dark:bg-secondary-900/30 dark:text-secondary-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}`}>
                     {preferences.blindReadEnabled ? 'On' : 'Off'}
                   </span>
                 </div>
