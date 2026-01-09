@@ -88,22 +88,34 @@ export default function ChatbotPage() {
         }
     };
 
-    const handleSendMessage = () => {
-        if (!inputMessage.trim()) return;
+    const handleSendMessage = async () => {
+    if (!inputMessage.trim()) return;
 
-        // Add user message
-        const userMsg = { role: 'user' as const, content: inputMessage };
-        setMessages([...messages, userMsg]);
-        setInputMessage('');
-        setIsTyping(true);
+    const userMsg = { role: 'user' as const, content: inputMessage };
+    setMessages(prev => [...prev, userMsg]);
+    setInputMessage('');
+    setIsTyping(true);
 
-        // Simulate bot response delay
-        setTimeout(() => {
-            const botResponse = getBotResponse(inputMessage);
-            setMessages(prev => [...prev, { role: 'bot', content: botResponse }]);
-            setIsTyping(false);
-        }, 1000);
+    try {
+        const reply = getBotResponse(userMsg.content);
+
+        setMessages(prev => [
+            ...prev,
+            { role: 'bot', content: reply }
+        ]);
+    } catch (error) {
+        setMessages(prev => [
+            ...prev,
+            {
+                role: 'bot',
+                content: "⚠️ I'm having trouble connecting to the server. Please try again."
+            }
+        ]);
+    } finally {
+        setIsTyping(false);
+    }
     };
+
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -230,9 +242,6 @@ export default function ChatbotPage() {
                                 </svg>
                             </button>
                         </div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                            Note: This is a demo chatbot with pre-programmed responses. In production, it would connect to an AI service.
-                        </p>
                     </div>
                 </div>
             </div>

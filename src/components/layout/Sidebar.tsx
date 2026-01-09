@@ -87,6 +87,15 @@ const navigationItems = [
         )
     },
     {
+        name: 'Profile',
+        href: '/profile',
+        icon: (
+            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A9.969 9.969 0 0112 15c2.5 0 4.847.93 6.879 2.475M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+        )
+    },
+    {
         name: 'Settings',
         href: '/settings',
         icon: (

@@ -24,3 +24,5 @@ yarn-error.log*
 node_modules
 .next
 .env
+__pycache__/
+*.pyc

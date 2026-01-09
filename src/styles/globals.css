@@ -49,6 +49,10 @@ body {
   direction: rtl;
 }
 
+.chip {
+  @apply bg-white border px-4 py-2 rounded-full text-sm hover:bg-blue-600 hover:text-white transition;
+}
+
 /* Custom component classes */
 @layer components {
   .btn {
