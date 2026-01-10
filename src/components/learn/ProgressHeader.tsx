@@ -19,7 +19,7 @@ export default function ProgressHeader({ title }: { title: string }) {
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
-              className="bg-gradient-to-r from-blue-500 to-teal-500 h-2 rounded-full"
+              className="bg-primary-600 h-2 rounded-full"
             />
           </div>
           <div className="text-xs mt-1 text-slate-500 dark:text-slate-400">{progress}% complete</div>

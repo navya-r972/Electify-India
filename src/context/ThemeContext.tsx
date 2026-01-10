@@ -12,13 +12,13 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('dark');
+  const [theme, setTheme] = useState<Theme>('light');
 
   useEffect(() => {
     // Check if user has a theme preference in localStorage
     const storedTheme = localStorage.getItem('theme') as Theme | null;
     
-    // Set theme based on stored preference, otherwise keep the default dark theme
+    // Set theme based on stored preference
     if (storedTheme) {
       setTheme(storedTheme);
     }

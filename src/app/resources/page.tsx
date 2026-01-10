@@ -1,7 +1,5 @@
 'use client';
 
-// AppLayout is now provided globally via ConditionalLayout
-import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
@@ -14,103 +12,69 @@ const resources = [
         title: "Constitution of India",
         description: "Articles 83 and 172 regarding the term of Parliament and State Legislatures",
         type: "PDF",
-        source: "Ministry of Law and Justice"
+        source: "Ministry of Law and Justice",
+        url: "https://legislative.gov.in/constitution-of-india"
       },
       {
-        title: "Election Commission of India Reports",
+        title: "Election Commission Reports",
         description: "Official data on election expenditure and logistics",
         type: "Website",
-        source: "Election Commission of India"
+        source: "Election Commission of India",
+        url: "https://eci.gov.in/"
       },
       {
-        title: "Law Commission Report No. 170 (1999)",
+        title: "Law Commission Report No. 170",
         description: "Reform of the Electoral Laws - First report on simultaneous elections",
         type: "PDF",
-        source: "Law Commission of India"
+        source: "Law Commission of India",
+        url: "#"
       },
       {
-        title: "Law Commission Report No. 255 (2015)",
-        description: "Electoral Reforms - Updated examination of simultaneous elections",
+        title: "NITI Aayog Analysis",
+        description: "Analysis of Simultaneous Elections: Constitutional and Legal Perspectives",
         type: "PDF",
-        source: "Law Commission of India"
+        source: "NITI Aayog",
+        url: "#"
       }
     ]
   },
   {
     id: 2,
-    category: "Committee Reports",
+    category: "Research & Analysis",
     items: [
       {
-        title: "NITI Aayog Working Paper",
-        description: "Analysis of Simultaneous Elections: Constitutional and Legal Perspectives",
-        type: "PDF",
-        source: "NITI Aayog"
+        title: "Economic Impact Study",
+        description: "Independent analysis of potential cost savings",
+        type: "Research",
+        source: "Economic Research Institute",
+        url: "#"
       },
       {
-        title: "Parliamentary Standing Committee Reports",
-        description: "Various committee discussions on electoral reforms",
-        type: "PDF",
-        source: "Parliament of India"
+        title: "Federal Structure Analysis",
+        description: "Impact on India's federal system",
+        type: "Article",
+        source: "Political Science Review",
+        url: "#"
       }
     ]
   },
   {
     id: 3,
-    category: "Historical Context",
+    category: "Historical Data",
     items: [
       {
-        title: "Election Results 1951-1967",
-        description: "Historical data from when India had simultaneous elections",
+        title: "1951-1967 Election Data",
+        description: "Historical records of simultaneous elections",
         type: "Data",
-        source: "Election Commission of India"
+        source: "ECI Archives",
+        url: "#"
       },
       {
-        title: "Electoral History of India",
-        description: "Comprehensive timeline of electoral reforms and changes",
+        title: "Electoral Reform Timeline",
+        description: "Chronology of electoral changes in India",
         type: "Article",
-        source: "Election Commission Archives"
-      }
-    ]
-  },
-  {
-    id: 4,
-    category: "Expert Analysis",
-    items: [
-      {
-        title: "Constitutional Expert Opinions",
-        description: "Collection of analyses from constitutional law experts on ONOE feasibility",
-        type: "Articles",
-        source: "Various Academic Institutions"
-      },
-      {
-        title: "Economic Impact Studies",
-        description: "Independent analyses of potential cost savings and economic implications",
-        type: "Research Papers",
-        source: "Economic Research Institutions"
-      },
-      {
-        title: "Federal Structure Analysis",
-        description: "Studies examining the impact on India's federal system",
-        type: "Research Papers",
-        source: "Political Science Departments"
-      }
-    ]
-  },
-  {
-    id: 5,
-    category: "International Comparisons",
-    items: [
-      {
-        title: "Electoral Systems Worldwide",
-        description: "How other federal democracies conduct elections",
-        type: "Comparative Study",
-        source: "International IDEA"
-      },
-      {
-        title: "Best Practices in Electoral Management",
-        description: "Global perspectives on election timing and coordination",
-        type: "Report",
-        source: "International Election Organizations"
+        source: "History Department",
+        url: "#"
       }
     ]
   }
@@ -124,160 +88,89 @@ export default function ResourcesPage() {
     : resources;
 
   return (
-    <>
-      <div className="min-h-screen bg-gradient-to-b from-white to-slate-50 dark:from-dark-900 dark:to-dark-800 py-12">
-        <div className="container mx-auto px-4">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-800 dark:text-dark-50">
-              Official Resources
-            </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Access official documents, committee reports, and credible sources to deepen your understanding of ONOE
-            </p>
-          </div>
-
-          {/* Category Filter */}
-          <div className="max-w-4xl mx-auto mb-8">
-            <div className="flex flex-wrap gap-2 justify-center">
-              <button
-                onClick={() => setSelectedCategory(null)}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${selectedCategory === null
-                  ? 'bg-teal-600 text-white shadow-md'
-                  : 'bg-white dark:bg-dark-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-dark-700 hover:border-teal-400'
-                  }`}
-              >
-                All Resources
-              </button>
-              {resources.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.category)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all ${selectedCategory === category.category
-                    ? 'bg-teal-600 text-white shadow-md'
-                    : 'bg-white dark:bg-dark-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-dark-700 hover:border-teal-400'
-                    }`}
-                >
-                  {category.category}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Resources List */}
-          <div className="max-w-5xl mx-auto space-y-8">
-            {filteredResources.map((category, categoryIndex) => (
-              <motion.div
-                key={category.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: categoryIndex * 0.1 }}
-                className="bg-white dark:bg-dark-800 rounded-xl shadow-lg p-8 border border-slate-100 dark:border-dark-700"
-              >
-                <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-dark-50 flex items-center">
-                  <span className="bg-teal-100 dark:bg-teal-900/30 rounded-full w-8 h-8 flex items-center justify-center text-teal-700 dark:text-teal-300 font-bold mr-3">
-                    {category.id}
-                  </span>
-                  {category.category}
-                </h2>
-
-                <div className="space-y-4">
-                  {category.items.map((item, itemIndex) => (
-                    <motion.div
-                      key={itemIndex}
-                      whileHover={{ x: 5 }}
-                      className="border-l-4 border-teal-500 pl-6 py-3 bg-slate-50 dark:bg-dark-700 rounded-r-lg"
-                    >
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h3 className="text-lg font-bold text-gray-800 dark:text-dark-50 mb-1">
-                            {item.title}
-                          </h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                            {item.description}
-                          </p>
-                          <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
-                            <span className="inline-flex items-center px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded">
-                              {item.type}
-                            </span>
-                            <span className="flex items-center">
-                              <svg className="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                              </svg>
-                              {item.source}
-                            </span>
-                          </div>
-                        </div>
-                        <button className="ml-4 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors text-sm font-medium">
-                          Access →
-                        </button>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Disclaimer */}
-          <div className="max-w-4xl mx-auto mt-12">
-            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-6">
-              <div className="flex items-start">
-                <svg className="h-6 w-6 text-amber-600 dark:text-amber-400 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                </svg>
-                <div>
-                  <h3 className="text-lg font-bold text-amber-900 dark:text-amber-100 mb-2">
-                    About These Resources
-                  </h3>
-                  <p className="text-sm text-amber-800 dark:text-amber-200 mb-2">
-                    All resources listed here are from official government sources, constitutional documents, or credible academic institutions. We do not host these documents but provide information on where to access them.
-                  </p>
-                  <p className="text-sm text-amber-800 dark:text-amber-200">
-                    <strong>Note:</strong> Some resources may require visiting official government websites. We recommend verifying the authenticity of any document you access.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* How to Use Resources */}
-          <div className="max-w-4xl mx-auto mt-8">
-            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
-              <h3 className="text-lg font-bold text-blue-900 dark:text-blue-100 mb-4">
-                How to Use These Resources
-              </h3>
-              <ul className="space-y-2 text-sm text-blue-800 dark:text-blue-200">
-                <li className="flex items-start">
-                  <svg className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span><strong>Start with Official Documents:</strong> Begin with constitutional texts and Election Commission reports for foundational understanding</span>
-                </li>
-                <li className="flex items-start">
-                  <svg className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span><strong>Read Committee Reports:</strong> Law Commission and NITI Aayog reports provide detailed analysis and recommendations</span>
-                </li>
-                <li className="flex items-start">
-                  <svg className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span><strong>Compare Perspectives:</strong> Read expert analyses from different viewpoints to form a balanced understanding</span>
-                </li>
-                <li className="flex items-start">
-                  <svg className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span><strong>Verify Sources:</strong> Always check that documents come from official government or credible academic sources</span>
-                </li>
-              </ul>
-            </div>
-          </div>
+    <div className="min-h-screen bg-gray-50 dark:bg-dark-900 py-12 px-4">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold mb-4 text-gray-800 dark:text-white">Resources Library</h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
+            Access official documents, reports, and analyses.
+          </p>
         </div>
 
+        {/* Filter Buttons */}
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
+          <button
+            onClick={() => setSelectedCategory(null)}
+            className={`px-6 py-2 rounded-full font-medium transition-colors ${
+              selectedCategory === null 
+              ? 'bg-primary-600 text-white shadow-md' 
+              : 'bg-white text-gray-700 hover:bg-gray-100 dark:bg-dark-800 dark:text-gray-300 dark:hover:bg-dark-700 border border-gray-200 dark:border-dark-700'
+            }`}
+          >
+            All
+          </button>
+          {resources.map(cat => (
+            <button
+              key={cat.id}
+              onClick={() => setSelectedCategory(cat.category)}
+              className={`px-6 py-2 rounded-full font-medium transition-colors ${
+                selectedCategory === cat.category 
+                ? 'bg-primary-600 text-white shadow-md' 
+                : 'bg-white text-gray-700 hover:bg-gray-100 dark:bg-dark-800 dark:text-gray-300 dark:hover:bg-dark-700 border border-gray-200 dark:border-dark-700'
+              }`}
+            >
+              {cat.category}
+            </button>
+          ))}
+        </div>
+
+        <div className="space-y-12">
+          {filteredResources.map((category) => (
+            <div key={category.id}>
+              <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white border-l-4 border-primary-600 pl-4">
+                {category.category}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {category.items.map((item, index) => (
+                  <motion.a
+                    key={index}
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block bg-white dark:bg-dark-800 rounded-xl shadow-card p-6 border border-gray-100 dark:border-dark-700 relative overflow-hidden group hover:border-primary-200 transition-colors"
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="absolute top-0 right-0 bg-primary-50 dark:bg-primary-900/20 px-3 py-1 rounded-bl-lg text-xs font-semibold text-primary-600 dark:text-primary-300">
+                      {item.type}
+                    </div>
+                    
+                    <div className="mb-4 text-primary-600 dark:text-primary-400">
+                      {item.type === 'PDF' ? (
+                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                      ) : item.type === 'Website' ? (
+                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg>
+                      ) : (
+                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                      )}
+                    </div>
+
+                    <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-primary-600 transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 leading-relaxed">
+                      {item.description}
+                    </p>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">
+                      Source: {item.source}
+                    </div>
+                  </motion.a>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -16,7 +16,7 @@ export default function Level5Page() {
     recordMythFactResult(correct);
   };
   return (
-    <LevelShell levelId="level-5" title="Level 5: Myth vs Fact" prevHref="/learn/level-4" nextHref="/learn/level-6">
+    <LevelShell levelId="level-5" title="Level 5: Reality Check" prevHref="/learn/level-4" nextHref="/learn/level-6">
       <SwipeDeck cards={cards} onSwipe={onSwipe} />
       <div className="mt-4 text-xs text-slate-600 dark:text-slate-300">Swipe left for Myth, right for Fact.</div>
     </LevelShell>

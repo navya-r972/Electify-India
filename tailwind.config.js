@@ -21,26 +21,59 @@ module.exports = {
           700: '#141713ff',
           800: '#5d9537',
           900: '#46781a',
+          DEFAULT: '#6A5ACD', // Muted Purple - Informational (ECISVEEP style)
+          50: '#f2f0fc',
+          100: '#e6e1f9',
+          200: '#d0cbf5',
+          300: '#b6b0f0',
+          400: '#9b94eb',
+          500: '#6A5ACD', // Main muted purple
+          600: '#5c4eb5',
+          700: '#4e429d',
+          800: '#403685',
+          900: '#322a6d',
+        },
+        secondary: {
+          DEFAULT: '#D88C9A', // Soft Pink / Rose - Engagement
+          50: '#fcf4f5',
+          100: '#f9e8eb',
+          200: '#f3d1d8',
+          300: '#edb9c4',
+          400: '#e7a2b1',
+          500: '#D88C9A',
+          600: '#c27e8a',
+          700: '#ac707b',
+          800: '#97626c',
+          900: '#81545c',
+        },
+        accent: {
+          DEFAULT: '#F2D06B', // Muted Yellow / Warm Cream - Attention
+          50: '#fefbf0',
+          100: '#fdf7e1',
+          200: '#fbecc3',
+          300: '#fae1a4',
+          400: '#f8d686',
+          500: '#F2D06B',
+          600: '#dabb60',
+          700: '#c2a656',
+          800: '#a9924b',
+          900: '#917d40',
         },
         dark: {
-          DEFAULT: '#181818', // Main dark background
-          50: '#e5e5e5', // Darker off-white text for better visibility
-          100: '#d9d9d9', // Darker for better visibility
-          200: '#bfbfbf', // Darker for better visibility
-          300: '#a6a6a6', // Darker for better visibility
-          400: '#999DA3', // Darker light-gray for better text visibility
-          500: '#737373', // Darker for better visibility
-          600: '#5D666E', // Darker muted hints for better visibility
-          700: '#404040', // Darker for better visibility
+          DEFAULT: '#181818',
+          50: '#e5e5e5',
+          100: '#d9d9d9',
+          200: '#bfbfbf',
+          300: '#a6a6a6',
+          400: '#999DA3',
+          500: '#737373',
+          600: '#5D666E',
+          700: '#404040',
           800: '#333333',
-          900: '#1a1a1a', // Soft black
-          card: '#23272a', // Card background
-          elevated: '#262626', // Elevated card background
+          900: '#1a1a1a',
+          card: '#23272a',
+          elevated: '#262626',
         },
-      boxShadow: {
-        card: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-        'dark-card': '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.18)',
-      },
         teal: {
           DEFAULT: '#77B5A9', // Muted Teal - sections, highlights, CTA hover
           50: '#f0f6f5',

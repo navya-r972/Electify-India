@@ -73,16 +73,16 @@ function LoginContent() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-dark-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white dark:bg-dark-800 p-8 rounded-lg shadow-md">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark-900 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-white dark:bg-dark-800 p-8 rounded-lg shadow-card">
         <div>
-          <h1 className="text-center text-3xl font-extrabold text-gray-900 dark:text-white">
+          <h1 className="text-center text-3xl font-extrabold text-charcoal-900 dark:text-white">
             Electify India
           </h1>
-          <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+          <p className="mt-2 text-center text-sm text-charcoal-600 dark:text-gray-400">
             Understanding One Nation One Election
           </p>
-          <h2 className="mt-6 text-center text-2xl font-bold text-gray-900 dark:text-white">
+          <h2 className="mt-6 text-center text-2xl font-bold text-charcoal-900 dark:text-white">
             {mode === 'login' ? 'Login' : 'Sign Up'}
           </h2>
         </div>
@@ -91,7 +91,7 @@ function LoginContent() {
           <form className="mt-8 space-y-6" onSubmit={loginForm.handleSubmit(onLoginSubmit)}>
             <div className="rounded-md shadow-sm space-y-4">
               <div>
-                <label htmlFor="email" className="form-label">
+                <label htmlFor="email" className="form-label text-charcoal-700">
                   Email
                 </label>
                 <input
@@ -99,7 +99,7 @@ function LoginContent() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="form-input"
+                  className="form-input focus:ring-primary-500 focus:border-primary-500"
                   {...loginForm.register('email')}
                 />
                 {loginForm.formState.errors.email && (
@@ -107,7 +107,7 @@ function LoginContent() {
                 )}
               </div>
               <div>
-                <label htmlFor="password" className="form-label">
+                <label htmlFor="password" className="form-label text-charcoal-700">
                   Password
                 </label>
                 <input
@@ -115,7 +115,7 @@ function LoginContent() {
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="form-input"
+                  className="form-input focus:ring-primary-500 focus:border-primary-500"
                   {...loginForm.register('password')}
                 />
                 {loginForm.formState.errors.password && (
@@ -130,15 +130,15 @@ function LoginContent() {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-charcoal-900 dark:text-gray-300">
                   Remember me
                 </label>
               </div>
 
               <div className="text-sm">
-                <a href="#" className="font-medium text-teal-600 hover:text-teal-500">
+                <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
                   Forgot your password?
                 </a>
               </div>
@@ -147,7 +147,7 @@ function LoginContent() {
             <div>
               <button
                 type="submit"
-                className="btn btn-primary w-full"
+                className="btn btn-primary w-full bg-primary-600 hover:bg-primary-700 text-white"
               >
                 Login
               </button>
@@ -184,12 +184,12 @@ function LoginContent() {
             </div>
 
             <div className="text-center mt-4 space-y-3">
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-charcoal-600 dark:text-gray-400">
                 Don't have an account?{' '}
                 <button
                   type="button"
                   onClick={toggleMode}
-                  className="font-medium text-slate-600 hover:text-slate-500"
+                  className="font-medium text-primary-600 hover:text-primary-500"
                 >
                   Create an account
                 </button>
@@ -204,7 +204,7 @@ function LoginContent() {
               </div>
               <Link
                 href="/dashboard"
-                className="block w-full py-2 px-4 border-2 border-slate-300 dark:border-slate-600 rounded-md text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-dark-700 transition-colors"
+                className="block w-full py-2 px-4 border-2 border-slate-300 dark:border-slate-600 rounded-md text-sm font-medium text-charcoal-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-dark-700 transition-colors"
               >
                 Continue as Guest
               </Link>
@@ -217,7 +217,7 @@ function LoginContent() {
           <form className="mt-8 space-y-6" onSubmit={signupForm.handleSubmit(onSignupSubmit)}>
             <div className="rounded-md shadow-sm space-y-4">
               <div>
-                <label htmlFor="name" className="form-label">
+                <label htmlFor="name" className="form-label text-charcoal-700">
                   Full Name
                 </label>
                 <input
@@ -225,7 +225,7 @@ function LoginContent() {
                   type="text"
                   autoComplete="name"
                   required
-                  className="form-input"
+                  className="form-input focus:ring-primary-500 focus:border-primary-500"
                   {...signupForm.register('name')}
                 />
                 {signupForm.formState.errors.name && (
@@ -233,7 +233,7 @@ function LoginContent() {
                 )}
               </div>
               <div>
-                <label htmlFor="signup-email" className="form-label">
+                <label htmlFor="signup-email" className="form-label text-charcoal-700">
                   Email
                 </label>
                 <input
@@ -241,7 +241,7 @@ function LoginContent() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="form-input"
+                  className="form-input focus:ring-primary-500 focus:border-primary-500"
                   {...signupForm.register('email')}
                 />
                 {signupForm.formState.errors.email && (
@@ -249,7 +249,7 @@ function LoginContent() {
                 )}
               </div>
               <div>
-                <label htmlFor="signup-password" className="form-label">
+                <label htmlFor="signup-password" className="form-label text-charcoal-700">
                   Password
                 </label>
                 <input
@@ -257,7 +257,7 @@ function LoginContent() {
                   type="password"
                   autoComplete="new-password"
                   required
-                  className="form-input"
+                  className="form-input focus:ring-primary-500 focus:border-primary-500"
                   {...signupForm.register('password')}
                 />
                 {signupForm.formState.errors.password && (
@@ -265,7 +265,7 @@ function LoginContent() {
                 )}
               </div>
               <div>
-                <label htmlFor="confirm-password" className="form-label">
+                <label htmlFor="confirm-password" className="form-label text-charcoal-700">
                   Confirm Password
                 </label>
                 <input
@@ -273,7 +273,7 @@ function LoginContent() {
                   type="password"
                   autoComplete="new-password"
                   required
-                  className="form-input"
+                  className="form-input focus:ring-primary-500 focus:border-primary-500"
                   {...signupForm.register('confirmPassword')}
                 />
                 {signupForm.formState.errors.confirmPassword && (
@@ -285,7 +285,7 @@ function LoginContent() {
             <div>
               <button
                 type="submit"
-                className="btn btn-primary w-full"
+                className="btn btn-primary w-full bg-primary-600 hover:bg-primary-700 text-white"
               >
                 Sign Up
               </button>
@@ -306,7 +306,7 @@ function LoginContent() {
               <div className="mt-6">
                 <button
                   type="button"
-                  className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                  className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-charcoal-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                 >
                   <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24" width="24" height="24">
                     <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
@@ -322,12 +322,12 @@ function LoginContent() {
             </div>
 
             <div className="text-center mt-4 space-y-3">
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-charcoal-600 dark:text-gray-400">
                 Already have an account?{' '}
                 <button
                   type="button"
                   onClick={toggleMode}
-                  className="font-medium text-slate-600 hover:text-slate-500"
+                  className="font-medium text-primary-600 hover:text-primary-500"
                 >
                   Login
                 </button>
@@ -342,7 +342,7 @@ function LoginContent() {
               </div>
               <Link
                 href="/dashboard"
-                className="block w-full py-2 px-4 border-2 border-slate-300 dark:border-slate-600 rounded-md text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-dark-700 transition-colors"
+                className="block w-full py-2 px-4 border-2 border-slate-300 dark:border-slate-600 rounded-md text-sm font-medium text-charcoal-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-dark-700 transition-colors"
               >
                 Continue as Guest
               </Link>

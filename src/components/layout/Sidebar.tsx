@@ -24,11 +24,20 @@ const navigationItems = [
         )
     },
     {
-        name: 'Facts vs Myths',
-        href: '/quiz',
+        name: 'Knowledge Check',
+        href: '/knowledge-check',
         icon: (
             <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
+        )
+    },
+    {
+        name: 'Fact vs Myth',
+        href: '/fact-vs-myth',
+        icon: (
+            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
             </svg>
         )
     },
@@ -78,6 +87,15 @@ const navigationItems = [
         )
     },
     {
+        name: 'Profile',
+        href: '/profile',
+        icon: (
+            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A9.969 9.969 0 0112 15c2.5 0 4.847.93 6.879 2.475M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+        )
+    },
+    {
         name: 'Settings',
         href: '/settings',
         icon: (
@@ -109,19 +127,19 @@ export default function Sidebar() {
             <motion.aside
                 initial={false}
                 animate={{ width: '280px', x: 0 }}
-                className="fixed inset-y-0 left-0 z-40 w-[280px] bg-slate-800 dark:bg-slate-900 text-white flex flex-col shadow-xl"
+                className="fixed inset-y-0 left-0 z-40 w-[280px] bg-white border-r border-gray-200 dark:bg-dark-900 dark:border-dark-700 flex flex-col shadow-card"
             >
                 {/* Logo/Brand */}
-                <div className="p-6 border-b border-slate-700">
+                <div className="p-6 border-b border-gray-200 dark:border-dark-700">
                     <Link href="/" className="flex items-center space-x-3">
-                        <div className="bg-gradient-to-br from-blue-500 to-teal-500 rounded-lg p-2">
-                            <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="bg-primary-500 rounded-lg p-2 text-white">
+                            <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
                         </div>
                         <div>
-                            <h1 className="font-bold text-lg">Electify India</h1>
-                            <p className="text-xs text-slate-400">Understanding ONOE</p>
+                            <h1 className="font-bold text-lg text-charcoal-900 dark:text-white">Electify India</h1>
+                            <p className="text-xs text-charcoal-500 dark:text-gray-400">Understanding ONOE</p>
                         </div>
                     </Link>
                 </div>
@@ -139,8 +157,8 @@ export default function Sidebar() {
                       flex items-center space-x-3 px-4 py-3 rounded-lg
                       transition-all duration-200
                       ${isActive
-                                                ? 'bg-gradient-to-r from-blue-600 to-teal-600 text-white shadow-lg'
-                                                : 'text-slate-300 hover:bg-slate-700 hover:text-white'
+                                                ? 'bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300 font-semibold shadow-sm'
+                                                : 'text-charcoal-600 hover:bg-gray-100 hover:text-charcoal-900 dark:text-gray-400 dark:hover:bg-dark-800 dark:hover:text-white'
                                             }
                     `}
                                     >
