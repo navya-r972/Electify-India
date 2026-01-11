@@ -99,31 +99,32 @@ export default function BlindFeed() {
 
   {articles.map((a, idx) => (
     <div
-      key={idx}
-      onClick={() => {
-        setSelectedIndex(idx);
-        setRevealed(false);
-        setReflection(null);
-      }}
-      style={{
-        cursor: "pointer",
-        padding: "0.75rem",
-        marginBottom: "0.5rem",
-        borderRadius: "6px",
-        background:
-          idx === selectedIndex
-            ? "rgba(139, 92, 246, 0.15)"
-            : "transparent",
-        borderLeft:
-          idx === selectedIndex
-            ? "4px solid #8b5cf6"
-            : "4px solid transparent",
-        color: "#e5e7eb",
-      }}
-    >
-      {/* 🔒 Blind title until reveal */}
-      {revealed && idx === selectedIndex ? a.title : a.blindTitle}
-    </div>
+  key={idx}
+  onClick={() => {
+    setSelectedIndex(idx);
+    setRevealed(false);
+    setReflection(null);
+  }}
+  style={{
+    cursor: "pointer",
+    padding: "0.75rem",
+    marginBottom: "0.5rem",
+    borderRadius: "6px",
+    background:
+      idx === selectedIndex
+        ? "rgba(139, 92, 246, 0.15)"
+        : "#f9fafb",
+    borderLeft:
+      idx === selectedIndex
+        ? "4px solid #8b5cf6"
+        : "4px solid transparent",
+    color: idx === selectedIndex ? "#111827" : "#374151",
+  }}
+>
+  {/* Blind title until reveal */}
+  {revealed && idx === selectedIndex ? a.title : a.blindTitle}
+</div>
+
   ))}
 </div>
 
