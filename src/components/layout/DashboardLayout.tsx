@@ -83,7 +83,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     className={`group flex items-center px-2 py-2 text-base font-medium rounded-md ${pathname === item.href ? 'bg-primary-50 text-primary-600 dark:bg-primary-900' : 'text-charcoal-600 hover:bg-gray-50 hover:text-charcoal-900 dark:text-gray-300 dark:hover:bg-gray-700'}`}
                   >
                     <svg
-                      className={`mr-4 h-6 w-6 ${pathname === item.href ? 'text-primary-600' : 'text-charcoal-400 group-hover:text-charcoal-500 dark:text-gray-400 dark:group-hover:text-gray-300'}`}
+                      className={`mr-4 h-6 w-6 ${pathname === item.href ? 'text-primary-600' : 'text-slate-600 group-hover:text-slate-700 dark:text-gray-400 dark:group-hover:text-gray-300'}`}
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -108,7 +108,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   <div>
                     <div className="inline-block h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
                       <svg
-                        className="h-full w-full text-gray-400"
+                        className="h-full w-full text-slate-600"
                         fill="currentColor"
                         viewBox="0 0 24 24"
                       >
@@ -118,7 +118,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   </div>
                   <div className="ml-3">
                     <p className="text-base font-medium text-charcoal-700 dark:text-gray-300">User</p>
-                    <p className="text-sm font-medium text-charcoal-700 dark:text-gray-400 group-hover:text-charcoal-900 dark:group-hover:text-gray-300">
+                    <p className="text-sm font-medium text-slate-700 dark:text-gray-400 group-hover:text-slate-800 dark:group-hover:text-gray-300">
                     My Profile
                   </p>
                   </div>
@@ -147,7 +147,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md ${pathname === item.href ? 'bg-primary-50 text-primary-600 dark:bg-primary-900' : 'text-charcoal-600 hover:bg-gray-50 hover:text-charcoal-900 dark:text-gray-300 dark:hover:bg-gray-700'}`}
                 >
                   <svg
-                    className={`mr-3 h-6 w-6 ${pathname === item.href ? 'text-primary-600' : 'text-charcoal-400 group-hover:text-charcoal-500 dark:text-gray-400 dark:group-hover:text-gray-300'}`}
+                    className={`mr-3 h-6 w-6 ${pathname === item.href ? 'text-primary-600' : 'text-slate-600 group-hover:text-slate-700 dark:text-gray-400 dark:group-hover:text-gray-300'}`}
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -172,7 +172,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 <div>
                   <div className="inline-block h-9 w-9 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
                     <svg
-                      className="h-full w-full text-gray-400"
+                      className="h-full w-full text-slate-600"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                     >
@@ -182,7 +182,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 </div>
                 <div className="ml-3">
                   <p className="text-sm font-medium text-charcoal-700 dark:text-gray-300">User</p>
-                  <p className="text-xs font-medium text-charcoal-700 dark:text-gray-400 group-hover:text-charcoal-900 dark:group-hover:text-gray-300">
+                  <p className="text-xs font-medium text-slate-700 dark:text-gray-400 group-hover:text-slate-800 dark:group-hover:text-gray-300">
                     My Profile
                   </p>
                 </div>
@@ -196,7 +196,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="sticky top-0 z-10 lg:hidden pl-1 pt-1 sm:pl-3 sm:pt-3 bg-white dark:bg-dark-800 shadow dark:shadow-dark-card">
           <button
             type="button"
-            className="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-charcoal-500 hover:text-charcoal-900 dark:text-gray-400 dark:hover:text-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
+            className="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-slate-600 hover:text-slate-800 dark:text-gray-400 dark:hover:text-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
             onClick={toggleMobileMenu}
           >
             <span className="sr-only">Open sidebar</span>

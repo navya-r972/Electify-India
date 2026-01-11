@@ -96,7 +96,7 @@ export default function DashboardPage() {
           <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900 dark:text-dark-50 mb-2">
             Welcome back! 👋
           </h1>
-          <p className="text-charcoal-600 dark:text-gray-300">
+          <p className="text-slate-700 dark:text-gray-300">
             Continue your journey to understanding One Nation One Election
           </p>
         </div>
@@ -121,7 +121,7 @@ export default function DashboardPage() {
                   <div className="text-3xl font-bold text-orange-600 dark:text-orange-400">
                     {learningProgress.streak} 🔥
                   </div>
-                  <div className="text-sm text-charcoal-600 dark:text-gray-300 mt-1">
+                  <div className="text-sm text-slate-700 dark:text-gray-300 mt-1">
                     Day Streak
                   </div>
                 </div>
@@ -129,7 +129,7 @@ export default function DashboardPage() {
                   <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
                     {learningProgress.xp} ⚡
                   </div>
-                  <div className="text-sm text-charcoal-600 dark:text-gray-300 mt-1">
+                  <div className="text-sm text-slate-700 dark:text-gray-300 mt-1">
                     Total XP
                   </div>
                 </div>
@@ -137,7 +137,7 @@ export default function DashboardPage() {
                   <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
                     Lvl {learningProgress.level} 🏆
                   </div>
-                  <div className="text-sm text-charcoal-600 dark:text-gray-300 mt-1">
+                  <div className="text-sm text-slate-700 dark:text-gray-300 mt-1">
                     Current Level
                   </div>
                 </div>
@@ -146,26 +146,26 @@ export default function DashboardPage() {
               {/* Module Stats */}
               <div className="grid grid-cols-3 gap-4 mb-6">
                 <div className="text-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <div className="text-xl font-bold text-gray-700 dark:text-gray-300">
+                  <div className="text-xl font-bold text-slate-800 dark:text-gray-300">
                     {learningProgress.completed}
                   </div>
-                  <div className="text-xs text-charcoal-500 dark:text-gray-400 mt-1">
+                  <div className="text-xs text-slate-600 dark:text-gray-400 mt-1">
                     Completed
                   </div>
                 </div>
                 <div className="text-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <div className="text-xl font-bold text-gray-700 dark:text-gray-300">
+                  <div className="text-xl font-bold text-slate-800 dark:text-gray-300">
                     {learningProgress.inProgress}
                   </div>
-                  <div className="text-xs text-charcoal-500 dark:text-gray-400 mt-1">
+                  <div className="text-xs text-slate-600 dark:text-gray-400 mt-1">
                     In Progress
                   </div>
                 </div>
                 <div className="text-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <div className="text-xl font-bold text-gray-700 dark:text-gray-300">
+                  <div className="text-xl font-bold text-slate-800 dark:text-gray-300">
                     {learningProgress.total}
                   </div>
-                  <div className="text-xs text-charcoal-500 dark:text-gray-400 mt-1">
+                  <div className="text-xs text-slate-600 dark:text-gray-400 mt-1">
                     Total Modules
                   </div>
                 </div>
@@ -173,7 +173,7 @@ export default function DashboardPage() {
 
               {/* Progress Bar */}
               <div className="mb-4">
-                <div className="flex justify-between text-sm text-charcoal-600 dark:text-gray-300 mb-2">
+                <div className="flex justify-between text-sm text-slate-700 dark:text-gray-300 mb-2">
                   <span>Overall Progress</span>
                   <span className="font-semibold">{Math.round(learningProgress.percentage)}%</span>
                 </div>
@@ -206,7 +206,7 @@ export default function DashboardPage() {
                 <h3 className="text-xl font-bold text-charcoal-900 dark:text-dark-50 mb-3">
                   📖 Resume Where You Left Off
                 </h3>
-                <p className="text-charcoal-600 dark:text-gray-300 mb-4">
+                <p className="text-slate-700 dark:text-gray-300 mb-4">
                   Current Module: <span className="font-semibold capitalize">{learningProgress.lastModule.replace('-', ' ')}</span>
                 </p>
                 <div className="flex items-center space-x-3">
@@ -261,7 +261,7 @@ export default function DashboardPage() {
                             <h3 className="font-semibold text-charcoal-900 dark:text-dark-50 mb-1">
                               {item.title}
                             </h3>
-                            <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+                            <div className="flex items-center space-x-2 text-sm text-slate-600 dark:text-gray-400">
                               <span className="px-2 py-0.5 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 rounded">
                                 {item.type}
                               </span>
@@ -269,7 +269,7 @@ export default function DashboardPage() {
                               <span>{formatTime(item.createdAt)}</span>
                             </div>
                           </div>
-                          <svg className="h-5 w-5 text-gray-400 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="h-5 w-5 text-slate-600 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
                         </div>
@@ -278,7 +278,7 @@ export default function DashboardPage() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-4 text-gray-500">
+                <div className="text-center py-4 text-slate-600">
                   No recently viewed items.
                 </div>
               )}
@@ -354,36 +354,36 @@ export default function DashboardPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <svg className="h-5 w-5 text-charcoal-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="h-5 w-5 text-slate-700 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
                     </svg>
-                    <span className="text-charcoal-700 dark:text-gray-300">Language</span>
+                    <span className="text-slate-800 dark:text-gray-300">Language</span>
                   </div>
-                  <span className="font-semibold text-charcoal-900 dark:text-dark-50">
+                  <span className="font-semibold text-slate-900 dark:text-dark-50">
                     {preferences.language}
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <svg className="h-5 w-5 text-charcoal-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="h-5 w-5 text-slate-700 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                     </svg>
-                    <span className="text-charcoal-700 dark:text-gray-300">Audio</span>
+                    <span className="text-slate-800 dark:text-gray-300">Audio</span>
                   </div>
-                  <span className={`px-2 py-1 rounded text-sm font-medium ${preferences.audioEnabled ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}`}>
+                  <span className={`px-2 py-1 rounded text-sm font-medium ${preferences.audioEnabled ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-gray-100 text-slate-800 dark:bg-gray-700 dark:text-gray-300'}`}>
                     {preferences.audioEnabled ? 'Enabled' : 'Disabled'}
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <svg className="h-5 w-5 text-charcoal-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="h-5 w-5 text-slate-700 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                     </svg>
-                    <span className="text-charcoal-700 dark:text-gray-300">Blind Read</span>
+                    <span className="text-slate-800 dark:text-gray-300">Blind Read</span>
                   </div>
-                  <span className={`px-2 py-1 rounded text-sm font-medium ${preferences.blindReadEnabled ? 'bg-secondary-100 text-secondary-800 dark:bg-secondary-900/30 dark:text-secondary-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}`}>
+                  <span className={`px-2 py-1 rounded text-sm font-medium ${preferences.blindReadEnabled ? 'bg-secondary-100 text-secondary-800 dark:bg-secondary-900/30 dark:text-secondary-300' : 'bg-gray-100 text-slate-800 dark:bg-gray-700 dark:text-gray-300'}`}>
                     {preferences.blindReadEnabled ? 'On' : 'Off'}
                   </span>
                 </div>

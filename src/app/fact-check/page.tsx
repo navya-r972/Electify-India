@@ -82,7 +82,7 @@ export default function FactCheckPage() {
       <div className="container mx-auto px-4 max-w-4xl">
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-charcoal-900 dark:text-white">Fact Checker</h1>
-          <p className="text-lg text-charcoal-600 dark:text-gray-300">Enter a claim to verify its accuracy using AI.</p>
+          <p className="text-lg text-charcoal-800 dark:text-gray-300">Enter a claim to verify its accuracy using AI.</p>
         </div>
 
         <motion.div
@@ -90,7 +90,7 @@ export default function FactCheckPage() {
           animate={{ opacity: 1, y: 0 }}
           className="bg-white dark:bg-dark-800 rounded-xl shadow-card dark:shadow-dark-card p-6 border border-slate-100 dark:border-dark-700"
         >
-          <label htmlFor="fact-input" className="block text-sm font-medium text-charcoal-700 dark:text-gray-300 mb-2">
+          <label htmlFor="fact-input" className="block text-sm font-medium text-charcoal-900 dark:text-gray-300 mb-2">
             Your Claim
           </label>
           <textarea
@@ -99,20 +99,24 @@ export default function FactCheckPage() {
             onChange={(e) => setInput(e.target.value)}
             rows={4}
             placeholder="Enter a claim to verify..."
-            className="w-full rounded-lg border border-slate-200 dark:border-dark-700 bg-white dark:bg-dark-800 p-3 text-charcoal-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="w-full rounded-lg border border-slate-300 dark:border-dark-700 bg-white dark:bg-dark-800 p-3 text-charcoal-900 placeholder:text-charcoal-500 dark:text-gray-100 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
 
           <div className="mt-4 flex items-center gap-3">
             <button
               onClick={onVerifyFact}
               disabled={!input.trim() || loading}
-              className={`inline-flex items-center px-6 py-3 rounded-lg text-white font-medium transition-colors ${!input.trim() || loading ? "bg-gray-400 cursor-not-allowed" : "bg-primary-600 hover:bg-primary-700"}`}
+              className={`inline-flex items-center px-6 py-3 rounded-lg font-medium transition-colors ${
+                !input.trim() || loading
+                  ? "bg-slate-200 text-slate-500 cursor-not-allowed"
+                  : "bg-primary-600 text-white hover:bg-primary-700"
+              }`}
             >
               {loading ? "Verifying..." : "Verify Fact"}
             </button>
             <button
               onClick={onReset}
-              className="inline-flex items-center px-6 py-3 rounded-lg bg-slate-100 dark:bg-dark-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-dark-600 font-medium"
+              className="inline-flex items-center px-6 py-3 rounded-lg bg-slate-100 dark:bg-dark-700 text-slate-900 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-dark-600 font-medium"
             >
               Reset
             </button>
@@ -127,7 +131,7 @@ export default function FactCheckPage() {
           {loading && (
             <div className="mt-6 flex items-center justify-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
-              <span className="ml-3 text-charcoal-600 dark:text-gray-300">Analyzing your claim...</span>
+              <span className="ml-3 text-charcoal-800 dark:text-gray-300">Analyzing your claim...</span>
             </div>
           )}
 
@@ -154,7 +158,7 @@ export default function FactCheckPage() {
                     ></div>
                   </div>
                 </div>
-                <p className="text-sm text-charcoal-700 dark:text-gray-300">{result.reasoning}</p>
+                <p className="text-sm text-charcoal-900 dark:text-gray-300">{result.reasoning}</p>
               </div>
             </motion.div>
           )}

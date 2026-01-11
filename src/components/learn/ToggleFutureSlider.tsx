@@ -47,12 +47,12 @@ const ToggleFutureSlider: React.FC<ToggleFutureSliderProps> = ({ onComplete }) =
           <div className="relative">
             <div className="flex justify-between mb-4">
               <span className={`text-lg font-semibold transition-all duration-300 ${
-                currentSystem ? 'text-blue-400 scale-110' : 'text-gray-400'
+                currentSystem ? 'text-blue-400 scale-110' : 'text-slate-500'
               }`}>
                 Current System
               </span>
               <span className={`text-lg font-semibold transition-all duration-300 ${
-                !currentSystem ? 'text-purple-400 scale-110' : 'text-gray-400'
+                !currentSystem ? 'text-purple-400 scale-110' : 'text-slate-500'
               }`}>
                 ONOE Future
               </span>
@@ -119,7 +119,7 @@ const ToggleFutureSlider: React.FC<ToggleFutureSliderProps> = ({ onComplete }) =
                   <h3 className="text-xl font-bold text-blue-400 mb-4">💰 Repeated Costs</h3>
                   <p className="text-blue-200 mb-4">Separate campaigns, security arrangements, and administrative costs</p>
                   <div className="text-3xl font-bold text-red-400">₹50,000 Cr</div>
-                  <div className="text-sm text-blue-300">Total annual election expenditure</div>
+                  <div className="text-sm text-blue-400">Total annual election expenditure</div>
                 </div>
 
                 <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
@@ -155,7 +155,7 @@ const ToggleFutureSlider: React.FC<ToggleFutureSliderProps> = ({ onComplete }) =
                   <h3 className="text-xl font-bold text-purple-400 mb-4">💸 Massive Savings</h3>
                   <p className="text-purple-200 mb-4">Shared resources, reduced campaign costs, and efficient administration</p>
                   <div className="text-3xl font-bold text-green-400">₹25,000 Cr</div>
-                  <div className="text-sm text-purple-300">50% cost reduction</div>
+                  <div className="text-sm text-purple-400">50% cost reduction</div>
                 </div>
 
                 <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">

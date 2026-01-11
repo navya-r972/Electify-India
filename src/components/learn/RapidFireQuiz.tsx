@@ -141,7 +141,7 @@ const RapidFireQuiz: React.FC<RapidFireQuizProps> = ({ onComplete }) => {
           
           <div className="bg-white rounded-lg p-4 mb-4">
             <QRCodeSVG value={badgeData.qrData} size={128} level="H" />
-            <p className="text-xs text-gray-600 mt-2">Scan for ONOE Report</p>
+            <p className="text-xs text-slate-700 mt-2">Scan for ONOE Report</p>
           </div>
           
           <button

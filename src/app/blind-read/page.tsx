@@ -67,7 +67,7 @@ The Congress party raised concerns. The Chief Minister said regional parties lik
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Blind Reading Mode
           </h1>
-          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p className="text-black dark:text-gray-300 max-w-2xl mx-auto">
             Remove political bias by hiding identities before judging content
           </p>
         </div>
@@ -79,7 +79,7 @@ The Congress party raised concerns. The Chief Minister said regional parties lik
             className={`px-5 py-2 rounded-lg ${
               mode === 'news'
                 ? 'bg-purple-600 text-white'
-                : 'bg-slate-200 dark:bg-slate-700'
+                : 'bg-slate-200 text-black dark:bg-slate-700'
             }`}
           >
             Live News
@@ -89,7 +89,7 @@ The Congress party raised concerns. The Chief Minister said regional parties lik
             className={`px-5 py-2 rounded-lg ${
               mode === 'paste'
                 ? 'bg-purple-600 text-white'
-                : 'bg-slate-200 dark:bg-slate-700'
+                : 'bg-slate-200 text-black dark:bg-slate-700'
             }`}
           >
             Paste Text
@@ -119,7 +119,7 @@ The Congress party raised concerns. The Chief Minister said regional parties lik
                   onChange={(e) => setInputText(e.target.value)}
                   placeholder="Paste any political article here..."
                   rows={10}
-                  className="w-full px-4 py-3 border rounded-lg mb-4"
+                  className="w-full px-4 py-3 border rounded-lg mb-4 text-black placeholder:text-black"
                 />
 
                 <div className="flex justify-between items-center">
@@ -148,18 +148,18 @@ The Congress party raised concerns. The Chief Minister said regional parties lik
             >
               <div className="bg-white dark:bg-dark-800 rounded-xl p-6">
                 <h3 className="font-bold mb-2">Original Text</h3>
-                <p className="whitespace-pre-wrap">{inputText}</p>
+                <p className="whitespace-pre-wrap text-black">{inputText}</p>
               </div>
 
               <div className="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-6">
                 <h3 className="font-bold mb-2">Blind Read Version</h3>
-                <p className="whitespace-pre-wrap">{anonymizedText}</p>
+                <p className="whitespace-pre-wrap text-black">{anonymizedText}</p>
               </div>
 
               <div className="lg:col-span-2 flex justify-center">
                 <button
                   onClick={handleReset}
-                  className="px-6 py-3 bg-slate-200 dark:bg-slate-700 rounded-lg"
+                  className="px-6 py-3 bg-slate-200 text-black dark:bg-slate-700 rounded-lg"
                 >
                   Try Another Text
                 </button>
@@ -171,4 +171,3 @@ The Congress party raised concerns. The Chief Minister said regional parties lik
     </div>
   );
 }
-
