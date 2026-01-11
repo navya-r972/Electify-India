@@ -3,7 +3,12 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
-type Card = { id: string; text: string; type?: 'benefit' | 'concern' | 'fact' | 'myth' };
+export type Card = {
+  id: string;
+  text: string;
+  type?: "benefit" | "concern" | "fact" | "myth";
+};
+
 
 export default function SwipeDeck({ cards, onSwipe }: { cards: Card[]; onSwipe: (card: Card, direction: 'left' | 'right') => void }) {
   const [index, setIndex] = useState(0);
