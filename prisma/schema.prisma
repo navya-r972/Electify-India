@@ -53,6 +53,7 @@ model Activity {
   id          String   @id @default(uuid())
   type        String   // e.g., "LOGIN", "QUIZ_COMPLETE", "LEVEL_COMPLETE"
   title       String   @default("")
+  description String?
   url         String   @default("")
   createdAt   DateTime @default(now())
   
