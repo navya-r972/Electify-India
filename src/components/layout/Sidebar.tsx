@@ -139,7 +139,7 @@ export default function Sidebar() {
                         </div>
                         <div>
                             <h1 className="font-bold text-lg text-charcoal-900 dark:text-white">Electify India</h1>
-                            <p className="text-xs text-charcoal-500 dark:text-gray-400">Understanding ONOE</p>
+                            <p className="text-xs text-slate-600 dark:text-gray-400">Understanding ONOE</p>
                         </div>
                     </Link>
                 </div>
@@ -158,7 +158,7 @@ export default function Sidebar() {
                       transition-all duration-200
                       ${isActive
                                                 ? 'bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300 font-semibold shadow-sm'
-                                                : 'text-charcoal-600 hover:bg-gray-100 hover:text-charcoal-900 dark:text-gray-400 dark:hover:bg-dark-800 dark:hover:text-white'
+                                                : 'text-slate-700 hover:bg-gray-100 hover:text-slate-900 dark:text-gray-400 dark:hover:bg-dark-800 dark:hover:text-white'
                                             }
                     `}
                                     >

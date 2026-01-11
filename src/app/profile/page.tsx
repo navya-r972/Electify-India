@@ -81,7 +81,7 @@ export default function ProfilePage() {
       
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+        <h2 className="text-3xl font-bold text-black dark:text-white">
           My Profile
         </h2>
         <button className="px-4 py-2 rounded-md bg-primary-600 text-white hover:bg-primary-700">
@@ -92,10 +92,10 @@ export default function ProfilePage() {
       {/* Personal Info */}
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg mb-8">
         <div className="px-6 py-4 border-b dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <h3 className="text-lg font-semibold text-black dark:text-white">
             Citizen Information
           </h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-black dark:text-gray-400">
             Your basic account and voter details.
           </p>
         </div>
@@ -111,7 +111,7 @@ export default function ProfilePage() {
       {/* Learning Progress */}
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg mb-8">
         <div className="px-6 py-4 border-b dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <h3 className="text-lg font-semibold text-black dark:text-white">
             Learning Progress
           </h3>
         </div>
@@ -128,7 +128,7 @@ export default function ProfilePage() {
       {/* Recent Activity */}
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg mb-8">
         <div className="px-6 py-4 border-b dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <h3 className="text-lg font-semibold text-black dark:text-white">
             Recently Viewed
           </h3>
         </div>
@@ -138,13 +138,13 @@ export default function ProfilePage() {
             userData.recentActivity.map((item, index) => (
               <li
                 key={index}
-                className="p-3 rounded-md bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300"
+                className="p-3 rounded-md bg-gray-50 dark:bg-gray-900 text-black dark:text-gray-300"
               >
                 {item}
               </li>
             ))
           ) : (
-            <li className="text-gray-500 italic">No recent activity</li>
+            <li className="text-black italic">No recent activity</li>
           )}
         </ul>
       </div>
@@ -164,7 +164,7 @@ export default function ProfilePage() {
 function Info({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
+      <p className="text-sm text-black dark:text-gray-400">{label}</p>
       <p className="text-base font-medium text-gray-900 dark:text-white">{value}</p>
     </div>
   );
@@ -173,7 +173,7 @@ function Info({ label, value }: { label: string; value: string }) {
 function Progress({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="flex justify-between items-center">
-      <span className="text-gray-600 dark:text-gray-300">{label}</span>
+      <span className="text-black dark:text-gray-300">{label}</span>
       <span className="font-semibold text-gray-900 dark:text-white">{value}</span>
     </div>
   );

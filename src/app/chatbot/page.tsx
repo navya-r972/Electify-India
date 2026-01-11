@@ -85,14 +85,14 @@ export default function ChatbotPage() {
 
   return (
     <>
-            <div className="h-screen flex flex-col bg-gradient-to-b from-white to-slate-50 dark:from-dark-900 dark:to-dark-800">
+           <div className="h-screen flex flex-col bg-gradient-to-b from-slate-50 to-slate-100 dark:from-dark-900 dark:to-dark-800">
                 {/* Header */}
-                <div className="bg-white dark:bg-dark-800 border-b border-slate-200 dark:border-dark-700 p-6">
+                <div className="bg-white dark:bg-dark-800 border-b border-slate-300 dark:border-dark-700 p-6">
                     <div className="max-w-4xl mx-auto">
-                        <h1 className="text-3xl font-bold text-gray-800 dark:text-dark-50 mb-2">
+                        <h1 className="text-3xl font-bold text-slate-900 dark:text-dark-50 mb-2">
                             ONOE Chatbot Assistant
                         </h1>
-                        <p className="text-gray-600 dark:text-gray-300">
+                        <p className="text-slate-700 dark:text-gray-300">
                             Ask me anything about One Nation One Election
                         </p>
                     </div>
@@ -111,7 +111,7 @@ export default function ChatbotPage() {
                                 <div
                                     className={`max-w-[80%] rounded-lg p-4 ${message.role === 'user'
                                             ? 'bg-blue-600 text-white'
-                                            : 'bg-white dark:bg-dark-800 text-gray-800 dark:text-dark-50 border border-slate-200 dark:border-dark-700'
+                                            : 'bg-white dark:bg-dark-800 text-slate-900 dark:text-dark-50 border border-slate-300 dark:border-dark-700'
                                         }`}
                                 >
                                     <div className="prose prose-sm dark:prose-invert max-w-none">
@@ -129,9 +129,9 @@ export default function ChatbotPage() {
                             >
                                 <div className="bg-white dark:bg-dark-800 rounded-lg p-4 border border-slate-200 dark:border-dark-700">
                                     <div className="flex space-x-2">
-                                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                                        <div className="w-2 h-2 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                                        <div className="w-2 h-2 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                                        <div className="w-2 h-2 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                                     </div>
                                 </div>
                             </motion.div>
@@ -140,13 +140,13 @@ export default function ChatbotPage() {
                         {/* Suggested Questions (show only at start) */}
                         {messages.length === 1 && (
                             <div className="mt-8">
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Suggested questions:</p>
+                                <p className="text-sm text-slate-700 dark:text-gray-400 mb-3">Suggested questions:</p>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     {suggestedQuestions.map((question, index) => (
                                         <button
                                             key={index}
                                             onClick={() => setInputMessage(question)}
-                                            className="text-left p-3 bg-slate-100 dark:bg-dark-700 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-dark-600 transition-colors"
+                                            className="text-left p-3 bg-slate-100 dark:bg-dark-700 rounded-lg text-sm text-slate-800 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-dark-600 transition-colors"
                                         >
                                             {question}
                                         </button>
@@ -161,7 +161,7 @@ export default function ChatbotPage() {
                 <div className="bg-white dark:bg-dark-800 border-t border-slate-200 dark:border-dark-700 p-6">
                     <div className="max-w-4xl mx-auto">
                         <div className="flex space-x-3">
-                            <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 mb-2">
+                            <label className="flex items-center gap-2 text-sm text-slate-700 dark:text-gray-300 mb-2">
                                 <input type="checkbox" checked={blindMode} onChange={() => setBlindMode(!blindMode)} />
                                     Blind Mode
                             </label>
@@ -171,14 +171,14 @@ export default function ChatbotPage() {
                                 onKeyPress={handleKeyPress}
                                 placeholder="Ask a question about ONOE..."
                                 rows={1}
-                                className="flex-1 px-4 py-3 border border-slate-300 dark:border-dark-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-dark-700 dark:text-dark-50 resize-none"
+                                className="flex-1 px-4 py-3 border border-slate-300 dark:border-dark-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 placeholder:text-slate-500 dark:bg-dark-700 dark:text-dark-50 resize-none"
                             />
                             <button
                                 onClick={handleSendMessage}
                                 disabled={!inputMessage.trim()}
                                 className={`px-6 py-3 rounded-lg font-medium transition-all ${inputMessage.trim()
                                         ? 'bg-blue-600 text-white hover:bg-blue-700'
-                                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                        : 'bg-slate-300 text-slate-600 cursor-not-allowed'
                                     }`}
                             >
                                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

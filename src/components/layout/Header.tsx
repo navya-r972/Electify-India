@@ -20,19 +20,19 @@ const Header = () => {
             <nav className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <Link
                 href="/"
-                className="border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                className="border-transparent text-slate-600 dark:text-gray-300 hover:border-gray-300 hover:text-slate-800 dark:hover:text-gray-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
               >
                 {t('nav.home')}
               </Link>
               <Link
                 href="/dashboard"
-                className="border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                className="border-transparent text-slate-600 dark:text-gray-300 hover:border-gray-300 hover:text-slate-800 dark:hover:text-gray-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
               >
                 {t('nav.dashboard')}
               </Link>
               <Link
                 href="/quiz"
-                className="border-transparent text-gray-500 dark:text-gray-300 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                className="border-transparent text-slate-600 dark:text-gray-300 hover:border-gray-300 hover:text-slate-800 dark:hover:text-gray-200 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
               >
                 {t('nav.quiz')}
               </Link>

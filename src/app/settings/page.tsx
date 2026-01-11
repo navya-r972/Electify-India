@@ -27,7 +27,7 @@ export default function SettingsPage() {
                         <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-dark-50">
                             Settings & Preferences
                         </h1>
-                        <p className="text-lg text-gray-600 dark:text-gray-300">
+                        <p className="text-lg text-black dark:text-gray-300">
                             Customize your Electify India experience
                         </p>
                     </div>
@@ -39,13 +39,13 @@ export default function SettingsPage() {
                             animate={{ opacity: 1, y: 0 }}
                             className="bg-white dark:bg-dark-800 rounded-xl shadow-card p-6 border border-gray-200 dark:border-dark-700"
                         >
-                            <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-dark-50">
+                            <h2 className="text-2xl font-bold mb-4 text-black dark:text-dark-50">
                                 Language Preferences
                             </h2>
 
                             <div className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    <label className="block text-sm font-medium text-black dark:text-gray-300 mb-2">
                                         Content Language
                                     </label>
                                     <select
@@ -68,15 +68,15 @@ export default function SettingsPage() {
                             transition={{ delay: 0.1 }}
                             className="bg-white dark:bg-dark-800 rounded-xl shadow-card p-6 border border-gray-200 dark:border-dark-700"
                         >
-                            <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-dark-50">
+                            <h2 className="text-2xl font-bold mb-4 text-black dark:text-dark-50">
                                 Audio Settings
                             </h2>
 
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <p className="font-medium text-gray-900 dark:text-dark-50">Auto-play Audio</p>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Automatically play audio explanations</p>
+                                        <p className="font-medium text-black dark:text-dark-50">Auto-play Audio</p>
+                                        <p className="text-sm text-black dark:text-gray-400">Automatically play audio explanations</p>
                                     </div>
                                     <button
                                         onClick={() => handleSettingChange('audioAutoPlay', !settings.audioAutoPlay)}
@@ -91,7 +91,7 @@ export default function SettingsPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    <label className="block text-sm font-medium text-black dark:text-gray-300 mb-2">
                                         Voice Preference
                                     </label>
                                     <select
@@ -113,14 +113,14 @@ export default function SettingsPage() {
                             transition={{ delay: 0.2 }}
                             className="bg-white dark:bg-dark-800 rounded-xl shadow-card p-6 border border-gray-200 dark:border-dark-700"
                         >
-                            <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-dark-50">
+                            <h2 className="text-2xl font-bold mb-4 text-black dark:text-dark-50">
                                 Blind Reading Mode
                             </h2>
 
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="font-medium text-gray-900 dark:text-dark-50">Enable by Default</p>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">Automatically anonymize party/leader names in all content</p>
+                                    <p className="font-medium text-black dark:text-dark-50">Enable by Default</p>
+                                    <p className="text-sm text-black dark:text-gray-400">Automatically anonymize party/leader names in all content</p>
                                 </div>
                                 <button
                                     onClick={() => handleSettingChange('blindReadDefault', !settings.blindReadDefault)}
@@ -142,12 +142,12 @@ export default function SettingsPage() {
                             transition={{ delay: 0.3 }}
                             className="bg-white dark:bg-dark-800 rounded-xl shadow-card p-6 border border-gray-200 dark:border-dark-700"
                         >
-                            <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-dark-50">
+                            <h2 className="text-2xl font-bold mb-4 text-black dark:text-dark-50">
                                 Appearance
                             </h2>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <label className="block text-sm font-medium text-black dark:text-gray-300 mb-2">
                                     Theme
                                 </label>
                                 <select
@@ -169,14 +169,14 @@ export default function SettingsPage() {
                             transition={{ delay: 0.4 }}
                             className="bg-white dark:bg-dark-800 rounded-xl shadow-card p-6 border border-gray-200 dark:border-dark-700"
                         >
-                            <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-dark-50">
+                            <h2 className="text-2xl font-bold mb-4 text-black dark:text-dark-50">
                                 Notifications
                             </h2>
 
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="font-medium text-gray-900 dark:text-dark-50">Enable Notifications</p>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">Receive updates about new content and features</p>
+                                    <p className="font-medium text-black dark:text-dark-50">Enable Notifications</p>
+                                    <p className="text-sm text-black dark:text-gray-400">Receive updates about new content and features</p>
                                 </div>
                                 <button
                                     onClick={() => handleSettingChange('notifications', !settings.notifications)}

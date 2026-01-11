@@ -91,8 +91,8 @@ export default function ResourcesPage() {
     <div className="min-h-screen bg-gray-50 dark:bg-dark-900 py-12 px-4">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4 text-gray-800 dark:text-white">Resources Library</h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
+          <h1 className="text-4xl font-bold mb-4 text-black dark:text-white">Resources Library</h1>
+          <p className="text-lg text-black dark:text-gray-300">
             Access official documents, reports, and analyses.
           </p>
         </div>
@@ -104,7 +104,7 @@ export default function ResourcesPage() {
             className={`px-6 py-2 rounded-full font-medium transition-colors ${
               selectedCategory === null 
               ? 'bg-primary-600 text-white shadow-md' 
-              : 'bg-white text-gray-700 hover:bg-gray-100 dark:bg-dark-800 dark:text-gray-300 dark:hover:bg-dark-700 border border-gray-200 dark:border-dark-700'
+              : 'bg-white text-black hover:bg-gray-100 dark:bg-dark-800 dark:text-gray-300 dark:hover:bg-dark-700 border border-gray-300 dark:border-dark-700'
             }`}
           >
             All
@@ -116,7 +116,7 @@ export default function ResourcesPage() {
               className={`px-6 py-2 rounded-full font-medium transition-colors ${
                 selectedCategory === cat.category 
                 ? 'bg-primary-600 text-white shadow-md' 
-                : 'bg-white text-gray-700 hover:bg-gray-100 dark:bg-dark-800 dark:text-gray-300 dark:hover:bg-dark-700 border border-gray-200 dark:border-dark-700'
+                : 'bg-white text-black hover:bg-gray-100 dark:bg-dark-800 dark:text-gray-300 dark:hover:bg-dark-700 border border-gray-300 dark:border-dark-700'
               }`}
             >
               {cat.category}
@@ -127,7 +127,7 @@ export default function ResourcesPage() {
         <div className="space-y-12">
           {filteredResources.map((category) => (
             <div key={category.id}>
-              <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white border-l-4 border-primary-600 pl-4">
+              <h2 className="text-2xl font-bold mb-6 text-black dark:text-white border-l-4 border-primary-600 pl-4">
                 {category.category}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -155,13 +155,13 @@ export default function ResourcesPage() {
                       )}
                     </div>
 
-                    <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white group-hover:text-primary-600 transition-colors">
+                    <h3 className="text-xl font-bold mb-2 text-black dark:text-white group-hover:text-primary-600 transition-colors">
                       {item.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 leading-relaxed">
+                    <p className="text-black dark:text-gray-300 text-sm mb-4 leading-relaxed">
                       {item.description}
                     </p>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">
+                    <div className="text-xs text-black dark:text-gray-400 font-medium uppercase tracking-wide">
                       Source: {item.source}
                     </div>
                   </motion.a>

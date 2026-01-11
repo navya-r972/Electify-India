@@ -79,7 +79,7 @@ export default function NewHeader() {
           <div className="flex md:hidden">
             <button
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-dark-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
+              className="inline-flex items-center justify-center p-2 rounded-md text-slate-600 hover:text-slate-700 hover:bg-gray-100 dark:hover:bg-dark-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
             >
               <span className="sr-only">Open main menu</span>
               <svg
@@ -106,7 +106,7 @@ export default function NewHeader() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsMenuOpen(false)}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-white hover:text-primary-600 dark:hover:text-primary-500 hover:bg-gray-50 dark:hover:bg-dark-800"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-slate-800 dark:text-white hover:text-primary-600 dark:hover:text-primary-500 hover:bg-gray-50 dark:hover:bg-dark-800"
                   >
                     {link.label}
                   </a>
@@ -116,7 +116,7 @@ export default function NewHeader() {
                     href={link.href}
                     scroll={false}
                     onClick={() => setIsMenuOpen(false)}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-white hover:text-primary-600 dark:hover:text-primary-500 hover:bg-gray-50 dark:hover:bg-dark-800"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-slate-800 dark:text-white hover:text-primary-600 dark:hover:text-primary-500 hover:bg-gray-50 dark:hover:bg-dark-800"
                   >
                     {link.label}
                   </Link>
