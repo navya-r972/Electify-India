@@ -42,7 +42,8 @@ export async function POST(request: NextRequest) {
         activities: {
             create: {
                 type: 'REGISTER',
-                description: 'User registered',
+                title: 'User Registered',
+                url: ''
             }
         }
       },

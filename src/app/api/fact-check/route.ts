@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+import { getDataFromToken } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
@@ -111,6 +113,19 @@ RESPONSE FORMAT (JSON ONLY):
 
       if (typeof parsedResponse.reasoning !== 'string') {
         parsedResponse.reasoning = 'Analysis completed';
+      }
+
+      // Log activity
+      const userId = getDataFromToken(request);
+      if (userId) {
+          await prisma.activity.create({
+              data: {
+                  userId,
+                  type: 'FACT_CHECK',
+                  title: 'Used Fact Checker',
+                  url: '/fact-check'
+              }
+          });
       }
 
       return NextResponse.json(parsedResponse);

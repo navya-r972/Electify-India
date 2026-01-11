@@ -18,12 +18,12 @@ export default function ChatbotPage() {
 
     // Sample responses - in production, this would connect to an AI API
     const fetchBotResponse = async (message: string): Promise<string> => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_CHATBOT_API}/chat`, {
+    const token = localStorage.getItem('token');
+    const res = await fetch('/api/chat', {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            // add later if you enable API key
-            // "x-api-key": process.env.NEXT_PUBLIC_CHATBOT_KEY!
+            ...(token && { "Authorization": `Bearer ${token}` })
         },
         body: JSON.stringify({
         message,
