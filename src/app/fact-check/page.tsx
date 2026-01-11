@@ -11,53 +11,6 @@ type Analysis = {
   reasons: string[];
 };
 
-function analyzeText(input: string): Analysis {
-  const text = input.toLowerCase();
-  let score = 50; // baseline
-  const reasons: string[] = [];
-
-  const sensational = ["₹", "crore", "always", "never", "guaranteed", "everyone", "100%", "promised", "massive"];
-  const authority = ["source:", "eci", "election commission", "law commission", "report no.", "pdf", "doi", "http://", "https://", "footnote", "appendix"];
-  const hedging = ["may", "could", "suggests", "likely", "estimates", "appears"];
-
-  if (sensational.some(k => text.includes(k))) {
-    score -= 15;
-    reasons.push("Contains sensational or absolute phrasing.");
-  }
-  if (authority.some(k => text.includes(k))) {
-    score += 20;
-    reasons.push("Mentions sources or authoritative references.");
-  }
-  if (hedging.some(k => text.includes(k))) {
-    score += 5;
-    reasons.push("Uses cautious/hedging language rather than absolutes.");
-  }
-  const linkCount = (text.match(/https?:\/\//g) || []).length;
-  if (linkCount >= 2) {
-    score += 10;
-    reasons.push("Multiple external references/links present.");
-  }
-
-  const length = input.trim().length;
-  if (length < 40) {
-    score -= 20;
-    reasons.push("Very short or out-of-context claim.");
-  } else if (length > 500) {
-    score += 5;
-    reasons.push("Longer context provided.");
-  }
-
-  // Boundaries
-  if (score < 0) score = 0;
-  if (score > 100) score = 100;
-
-  let verdict: Analysis["verdict"] = "Unsupported";
-  if (score >= 70) verdict = "Factual";
-  else if (score >= 40) verdict = "Potentially Misleading";
-
-  return { verdict, confidence: Math.round(score), reasons };
-}
-
 export default function FactCheckPage() {
   const [input, setInput] = useState("");
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
@@ -66,10 +19,24 @@ export default function FactCheckPage() {
   const onAnalyze = async () => {
     if (!input.trim()) return;
     setLoading(true);
-    // Simulate analysis latency
-    await new Promise(r => setTimeout(r, 600));
-    setAnalysis(analyzeText(input));
-    setLoading(false);
+    try {
+      const res = await fetch('/api/fact-check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: input }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setAnalysis(data);
+      } else {
+        console.error('Failed to analyze text');
+      }
+    } catch (error) {
+      console.error('Error calling fact-check API', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onReset = () => {

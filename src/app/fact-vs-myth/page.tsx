@@ -1,39 +1,38 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const items = [
-  {
-    id: 1,
-    statement: "You can vote without a Voter ID card if you have other valid ID.",
-    isFact: true,
-    explanation: "Fact! If your name is in the electoral roll, you can vote using other specified IDs like Aadhaar, Passport, Driving License, etc."
-  },
-  {
-    id: 2,
-    statement: "EVMs can be hacked via Bluetooth or Wi-Fi.",
-    isFact: false,
-    explanation: "Myth! EVMs are standalone machines with no wireless communication capabilities. They are not connected to any network."
-  },
-  {
-    id: 3,
-    statement: "One Nation One Election requires a constitutional amendment.",
-    isFact: true,
-    explanation: "Fact! Implementing simultaneous elections would require amendments to Articles 83, 172, 85, 174, 356, and the Tenth Schedule of the Constitution."
-  },
-  {
-    id: 4,
-    statement: "NRI voters can vote online from abroad.",
-    isFact: false,
-    explanation: "Myth! Currently, NRIs must be physically present at their polling station in India to vote. Proposals for proxy voting or ETPBS are under discussion but not fully implemented for all."
-  }
-];
+type FactItem = {
+    id: number;
+    statement: string;
+    isFact: boolean;
+    explanation: string;
+};
 
 export default function FactVsMythPage() {
+  const [items, setItems] = useState<FactItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<'Fact' | 'Myth' | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    async function fetchItems() {
+        try {
+            const res = await fetch('/api/fact-vs-myth');
+            if (res.ok) {
+                const data = await res.json();
+                setItems(data);
+            }
+        } catch (error) {
+            console.error('Failed to fetch fact vs myth items', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+    fetchItems();
+  }, []);
 
   const handleSelection = (option: 'Fact' | 'Myth') => {
     if (selectedOption) return; // Prevent multiple clicks
@@ -133,8 +132,12 @@ export default function FactVsMythPage() {
                   </div>
 
                   <button
-                    onClick={nextCard}
-                    className="px-8 py-3 rounded-lg font-semibold bg-primary-600 hover:bg-primary-700 text-white transition-colors shadow-md"
+                    onClick={() => {
+                        setSelectedOption(null);
+                        setIsCorrect(null);
+                        setCurrentIndex((prev) => (prev + 1) % items.length);
+                    }}
+                    className="px-8 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors shadow-md"
                   >
                     Next Topic
                   </button>

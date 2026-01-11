@@ -31,22 +31,27 @@ export default function BlindReadPage() {
     CM: 'Leader B',
   };
 
-  const anonymizeText = (text: string) => {
-    let result = text;
-    const keys = Object.keys(nameMapping).sort((a, b) => b.length - a.length);
+  const [isProcessing, setIsProcessing] = useState(false);
 
-    keys.forEach((key) => {
-      const regex = new RegExp(key, 'gi');
-      result = result.replace(regex, nameMapping[key]);
-    });
-
-    return result;
-  };
-
-  const handleEnableBlindRead = () => {
+  const handleEnableBlindRead = async () => {
     if (!inputText.trim()) return;
-    setBlindReadEnabled(true);
-    setAnonymizedText(anonymizeText(inputText));
+    setIsProcessing(true);
+    try {
+      const res = await fetch('/api/blind/process', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: inputText }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setAnonymizedText(data.blindText);
+        setBlindReadEnabled(true);
+      }
+    } catch (error) {
+      console.error('Failed to anonymize text', error);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleReset = () => {
@@ -59,15 +64,15 @@ export default function BlindReadPage() {
 The Congress party raised concerns. The Chief Minister said regional parties like TMC and DMK must be consulted.`;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-slate-50 dark:from-dark-900 dark:to-dark-800 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-dark-900 py-12">
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="text-5xl mb-4">🕶️</div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-charcoal-900 dark:text-white">
             Blind Reading Mode
           </h1>
-          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p className="text-charcoal-600 dark:text-gray-300 max-w-2xl mx-auto">
             Remove political bias by hiding identities before judging content
           </p>
         </div>
@@ -76,20 +81,20 @@ The Congress party raised concerns. The Chief Minister said regional parties lik
         <div className="flex justify-center gap-4 mb-8">
           <button
             onClick={() => setMode('news')}
-            className={`px-5 py-2 rounded-lg ${
+            className={`px-5 py-2 rounded-lg font-medium transition-colors ${
               mode === 'news'
-                ? 'bg-purple-600 text-white'
-                : 'bg-slate-200 dark:bg-slate-700'
+                ? 'bg-primary-600 text-white shadow-md'
+                : 'bg-white dark:bg-dark-800 text-charcoal-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-700 border border-gray-200 dark:border-dark-700'
             }`}
           >
             Live News
           </button>
           <button
             onClick={() => setMode('paste')}
-            className={`px-5 py-2 rounded-lg ${
+            className={`px-5 py-2 rounded-lg font-medium transition-colors ${
               mode === 'paste'
-                ? 'bg-purple-600 text-white'
-                : 'bg-slate-200 dark:bg-slate-700'
+                ? 'bg-primary-600 text-white shadow-md'
+                : 'bg-white dark:bg-dark-800 text-charcoal-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-700 border border-gray-200 dark:border-dark-700'
             }`}
           >
             Paste Text
@@ -111,31 +116,31 @@ The Congress party raised concerns. The Chief Minister said regional parties lik
               animate={{ opacity: 1, y: 0 }}
               className="max-w-4xl mx-auto"
             >
-              <div className="bg-white dark:bg-dark-800 rounded-xl shadow-lg p-8">
-                <h2 className="text-2xl font-bold mb-4">Paste Your Text</h2>
+              <div className="bg-white dark:bg-dark-800 rounded-xl shadow-card p-8 border border-gray-100 dark:border-dark-700">
+                <h2 className="text-2xl font-bold mb-4 text-charcoal-900 dark:text-white">Paste Your Text</h2>
 
                 <textarea
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
                   placeholder="Paste any political article here..."
                   rows={10}
-                  className="w-full px-4 py-3 border rounded-lg mb-4"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-dark-600 rounded-lg mb-4 bg-white dark:bg-dark-700 text-charcoal-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
 
                 <div className="flex justify-between items-center">
                   <button
                     onClick={() => setInputText(sampleText)}
-                    className="text-sm text-purple-600 hover:underline"
+                    className="text-sm text-primary-600 hover:underline dark:text-primary-400"
                   >
                     Load Sample Text
                   </button>
 
                   <button
                     onClick={handleEnableBlindRead}
-                    disabled={!inputText.trim()}
-                    className="px-6 py-3 bg-purple-600 text-white rounded-lg"
+                    disabled={!inputText.trim() || isProcessing}
+                    className={`px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors shadow-md ${(!inputText.trim() || isProcessing) ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
-                    Enable Blind Read
+                    {isProcessing ? 'Processing...' : 'Read Blindly'}
                   </button>
                 </div>
               </div>
@@ -146,20 +151,20 @@ The Congress party raised concerns. The Chief Minister said regional parties lik
               animate={{ opacity: 1 }}
               className="grid grid-cols-1 lg:grid-cols-2 gap-6"
             >
-              <div className="bg-white dark:bg-dark-800 rounded-xl p-6">
-                <h3 className="font-bold mb-2">Original Text</h3>
-                <p className="whitespace-pre-wrap">{inputText}</p>
+              <div className="bg-white dark:bg-dark-800 rounded-xl p-6 shadow-card border border-gray-100 dark:border-dark-700">
+                <h3 className="font-bold mb-2 text-charcoal-900 dark:text-white">Original Text</h3>
+                <p className="whitespace-pre-wrap text-charcoal-700 dark:text-gray-300">{inputText}</p>
               </div>
 
-              <div className="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-6">
-                <h3 className="font-bold mb-2">Blind Read Version</h3>
-                <p className="whitespace-pre-wrap">{anonymizedText}</p>
+              <div className="bg-primary-50 dark:bg-primary-900/20 rounded-xl p-6 border border-primary-100 dark:border-primary-800">
+                <h3 className="font-bold mb-2 text-charcoal-900 dark:text-white">Blind Read Version</h3>
+                <p className="whitespace-pre-wrap text-charcoal-700 dark:text-gray-300">{anonymizedText}</p>
               </div>
 
               <div className="lg:col-span-2 flex justify-center">
                 <button
                   onClick={handleReset}
-                  className="px-6 py-3 bg-slate-200 dark:bg-slate-700 rounded-lg"
+                  className="px-6 py-3 bg-white dark:bg-dark-700 text-charcoal-700 dark:text-gray-300 rounded-lg border border-gray-300 dark:border-dark-600 hover:bg-gray-50 dark:hover:bg-dark-600 transition-colors shadow-sm"
                 >
                   Try Another Text
                 </button>

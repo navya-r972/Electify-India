@@ -3,28 +3,76 @@
 // AppLayout is now provided globally via ConditionalLayout
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
 export default function DashboardPage() {
-  // Mock data - in production, this would come from user state/API
-  const learningProgress = {
-    completed: 3,
-    inProgress: 2,
-    total: 5
-  };
+  const [learningProgress, setLearningProgress] = useState({
+    completed: 0,
+    inProgress: 0,
+    total: 0,
+    percentage: 0,
+    lastModule: ''
+  });
 
-  const recentlyViewed = [
-    { id: 1, title: "What is One Nation One Election?", type: "Learning Module", timestamp: "2 hours ago" },
-    { id: 2, title: "ONOE will save ₹1 lakh crore claim", type: "Fact Check", timestamp: "1 day ago" },
-    { id: 3, title: "Constitutional & Legal Aspects", type: "Learning Module", timestamp: "2 days ago" }
-  ];
-
-  const preferences = {
+  const [recentlyViewed, setRecentlyViewed] = useState<any[]>([]);
+  const [preferences, setPreferences] = useState({
     language: "English",
     audioEnabled: true,
     blindReadEnabled: false
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [progressRes, recentRes, prefsRes] = await Promise.all([
+          fetch('/api/user/progress'),
+          fetch('/api/user/recently-viewed'),
+          fetch('/api/user/preferences')
+        ]);
+
+        if (progressRes.ok) {
+          const progressData = await progressRes.json();
+          setLearningProgress(progressData);
+        }
+
+        if (recentRes.ok) {
+          const recentData = await recentRes.json();
+          setRecentlyViewed(recentData);
+        }
+
+        if (prefsRes.ok) {
+          const prefsData = await prefsRes.json();
+          setPreferences(prefsData);
+        }
+      } catch (error) {
+        console.error('Failed to fetch dashboard data', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  const formatTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - date.getTime()) / 1000); // seconds
+
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return `${Math.floor(diff / 60)} mins ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
+    return `${Math.floor(diff / 86400)} days ago`;
   };
 
-  const progressPercentage = (learningProgress.completed / learningProgress.total) * 100;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -53,30 +101,58 @@ export default function DashboardPage() {
                 Your Learning Progress
               </h2>
 
-              {/* Progress Stats */}
+              {/* Gamification Stats */}
               <div className="grid grid-cols-3 gap-4 mb-6">
-                <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-                  <div className="text-3xl font-bold text-green-600 dark:text-green-400">
-                    {learningProgress.completed}
+                 <div className="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
+                  <div className="text-3xl font-bold text-orange-600 dark:text-orange-400">
+                    {learningProgress.streak} 🔥
                   </div>
                   <div className="text-sm text-charcoal-600 dark:text-gray-300 mt-1">
+                    Day Streak
+                  </div>
+                </div>
+                <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
+                  <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                    {learningProgress.xp} ⚡
+                  </div>
+                  <div className="text-sm text-charcoal-600 dark:text-gray-300 mt-1">
+                    Total XP
+                  </div>
+                </div>
+                <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                    Lvl {learningProgress.level} 🏆
+                  </div>
+                  <div className="text-sm text-charcoal-600 dark:text-gray-300 mt-1">
+                    Current Level
+                  </div>
+                </div>
+              </div>
+
+              {/* Module Stats */}
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                <div className="text-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <div className="text-xl font-bold text-gray-700 dark:text-gray-300">
+                    {learningProgress.completed}
+                  </div>
+                  <div className="text-xs text-charcoal-500 dark:text-gray-400 mt-1">
                     Completed
                   </div>
                 </div>
-                <div className="text-center p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg border border-primary-200 dark:border-primary-800">
-                  <div className="text-3xl font-bold text-primary-600 dark:text-primary-400">
+                <div className="text-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <div className="text-xl font-bold text-gray-700 dark:text-gray-300">
                     {learningProgress.inProgress}
                   </div>
-                  <div className="text-sm text-charcoal-600 dark:text-gray-300 mt-1">
+                  <div className="text-xs text-charcoal-500 dark:text-gray-400 mt-1">
                     In Progress
                   </div>
                 </div>
-                <div className="text-center p-4 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
-                  <div className="text-3xl font-bold text-slate-600 dark:text-slate-400">
+                <div className="text-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <div className="text-xl font-bold text-gray-700 dark:text-gray-300">
                     {learningProgress.total}
                   </div>
-                  <div className="text-sm text-charcoal-600 dark:text-gray-300 mt-1">
-                    Total Topics
+                  <div className="text-xs text-charcoal-500 dark:text-gray-400 mt-1">
+                    Total Modules
                   </div>
                 </div>
               </div>
@@ -85,12 +161,12 @@ export default function DashboardPage() {
               <div className="mb-4">
                 <div className="flex justify-between text-sm text-charcoal-600 dark:text-gray-300 mb-2">
                   <span>Overall Progress</span>
-                  <span className="font-semibold">{Math.round(progressPercentage)}%</span>
+                  <span className="font-semibold">{Math.round(learningProgress.percentage)}%</span>
                 </div>
                 <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
                   <motion.div
                     initial={{ width: 0 }}
-                    animate={{ width: `${progressPercentage}%` }}
+                    animate={{ width: `${learningProgress.percentage}%` }}
                     transition={{ duration: 1, ease: "easeOut" }}
                     className="bg-primary-600 h-3 rounded-full"
                   />
@@ -106,33 +182,35 @@ export default function DashboardPage() {
             </motion.div>
 
             {/* Continue Learning Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="bg-white dark:bg-dark-800 rounded-xl shadow-card p-6 border border-primary-100 dark:border-primary-900/20"
-            >
-              <h3 className="text-xl font-bold text-charcoal-900 dark:text-dark-50 mb-3">
-                📖 Resume Where You Left Off
-              </h3>
-              <p className="text-charcoal-600 dark:text-gray-300 mb-4">
-                Module 4: Potential Benefits of ONOE
-              </p>
-              <div className="flex items-center space-x-3">
-                <Link
-                  href="/learn"
-                  className="px-6 py-2 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
-                >
-                  Resume
-                </Link>
-                <Link
-                  href="/knowledge-check"
-                  className="px-6 py-2 bg-white dark:bg-dark-700 text-primary-600 dark:text-primary-400 border-2 border-primary-600 dark:border-primary-400 rounded-lg font-medium hover:bg-primary-50 dark:hover:bg-dark-600 transition-colors"
-                >
-                  Knowledge Check
-                </Link>
-              </div>
-            </motion.div>
+            {learningProgress.lastModule && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="bg-white dark:bg-dark-800 rounded-xl shadow-card p-6 border border-primary-100 dark:border-primary-900/20"
+              >
+                <h3 className="text-xl font-bold text-charcoal-900 dark:text-dark-50 mb-3">
+                  📖 Resume Where You Left Off
+                </h3>
+                <p className="text-charcoal-600 dark:text-gray-300 mb-4">
+                  Current Module: <span className="font-semibold capitalize">{learningProgress.lastModule.replace('-', ' ')}</span>
+                </p>
+                <div className="flex items-center space-x-3">
+                  <Link
+                    href={`/learn/${learningProgress.lastModule}`}
+                    className="px-6 py-2 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
+                  >
+                    Resume
+                  </Link>
+                  <Link
+                    href="/knowledge-check"
+                    className="px-6 py-2 bg-white dark:bg-dark-700 text-primary-600 dark:text-primary-400 border-2 border-primary-600 dark:border-primary-400 rounded-lg font-medium hover:bg-primary-50 dark:hover:bg-dark-600 transition-colors"
+                  >
+                    Knowledge Check
+                  </Link>
+                </div>
+              </motion.div>
+            )}
 
             {/* Recently Viewed Articles */}
             <motion.div
@@ -153,35 +231,43 @@ export default function DashboardPage() {
                 </Link>
               </div>
 
-              <div className="space-y-3">
-                {recentlyViewed.map((item, index) => (
-                  <motion.div
-                    key={item.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 + index * 0.1 }}
-                    className="p-4 bg-white dark:bg-dark-700 rounded-lg border border-slate-200 dark:border-dark-600 hover:border-primary-400 dark:hover:border-primary-500 transition-colors cursor-pointer"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-charcoal-900 dark:text-dark-50 mb-1">
-                          {item.title}
-                        </h3>
-                        <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                          <span className="px-2 py-0.5 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 rounded">
-                            {item.type}
-                          </span>
-                          <span>•</span>
-                          <span>{item.timestamp}</span>
+              {recentlyViewed.length > 0 ? (
+                <div className="space-y-3">
+                  {recentlyViewed.map((item, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3 + index * 0.1 }}
+                      className="p-4 bg-white dark:bg-dark-700 rounded-lg border border-slate-200 dark:border-dark-600 hover:border-primary-400 dark:hover:border-primary-500 transition-colors cursor-pointer"
+                    >
+                      <Link href={item.url || '#'}>
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-charcoal-900 dark:text-dark-50 mb-1">
+                              {item.title}
+                            </h3>
+                            <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+                              <span className="px-2 py-0.5 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 rounded">
+                                {item.type}
+                              </span>
+                              <span>•</span>
+                              <span>{formatTime(item.timestamp)}</span>
+                            </div>
+                          </div>
+                          <svg className="h-5 w-5 text-gray-400 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
                         </div>
-                      </div>
-                      <svg className="h-5 w-5 text-gray-400 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-4 text-gray-500">
+                  No recently viewed items.
+                </div>
+              )}
             </motion.div>
           </div>
 
