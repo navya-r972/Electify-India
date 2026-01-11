@@ -21,7 +21,6 @@ model User {
   activities  Activity[]
   savedItems  SavedItem[]
   quizResults QuizResult[]
-  userProgress UserProgress[]
 }
 
 model UserProfile {
@@ -79,20 +78,6 @@ model QuizResult {
   
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         String
-}
-
-model UserProgress {
-  id            String   @id @default(uuid())
-  userId        String
-  levelId       Int
-  isCompleted   Boolean  @default(false)
-  lastAccessed  DateTime @default(now())
-  
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  @@unique([userId, levelId])
-  @@index([userId])
-  @@index([levelId])
 }
 
 model Location {
