@@ -1,26 +1,80 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function ProfilePage() {
-  const [userData] = useState({
+  const [userData, setUserData] = useState({
     name: 'Citizen User',
     email: 'citizen@gmail.com',
     voterStatus: 'Eligible Voter',
     language: 'English',
-    modulesCompleted: 4,
+    modulesCompleted: 0,
     totalModules: 7,
-    quizzesAttempted: 6,
-    avgScore: 82,
-    factChecksUsed: 12,
-    blindReadUsed: 5,
-    recentActivity: [
-      'ONOE: Pros & Challenges',
-      'Myth vs Fact Quiz',
-      'How Indian Elections Work'
-    ],
+    quizzesAttempted: 0,
+    avgScore: 0,
+    factChecksUsed: 0,
+    blindReadUsed: 0,
+    recentActivity: [] as string[],
   });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          setLoading(false);
+          return;
+        }
+
+        // Fetch Profile
+        const profileRes = await fetch('/api/profile', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        // Fetch Dashboard/Progress data for stats
+        const dashboardRes = await fetch('/api/dashboard', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (profileRes.ok && dashboardRes.ok) {
+          const profileData = await profileRes.json();
+          const dashboardData = await dashboardRes.json();
+
+          const completedCount = dashboardData.progress?.completedLevels?.length || 0;
+          const quizzes = dashboardData.progress?.mythFactStats?.total || 0;
+          const score = quizzes > 0 
+            ? Math.round((dashboardData.progress?.mythFactStats?.correct / quizzes) * 100) 
+            : 0;
+
+          setUserData({
+            name: profileData.name || 'Citizen User',
+            email: profileData.email || '',
+            voterStatus: 'Eligible Voter', // Placeholder as not in schema yet
+            language: profileData.language || 'English', // Placeholder
+            modulesCompleted: completedCount,
+            totalModules: 7,
+            quizzesAttempted: quizzes,
+            avgScore: score,
+            factChecksUsed: 0, // Placeholder
+            blindReadUsed: 0, // Placeholder
+            recentActivity: dashboardData.recentActivities?.map((a: any) => a.description) || [],
+          });
+        }
+      } catch (error) {
+        console.error('Failed to fetch profile', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProfile();
+  }, []);
+
+  if (loading) {
+    return <div className="p-8 text-center">Loading profile...</div>;
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -80,14 +134,18 @@ export default function ProfilePage() {
         </div>
 
         <ul className="p-6 space-y-3">
-          {userData.recentActivity.map((item, index) => (
-            <li
-              key={index}
-              className="p-3 rounded-md bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300"
-            >
-              {item}
-            </li>
-          ))}
+          {userData.recentActivity.length > 0 ? (
+            userData.recentActivity.map((item, index) => (
+              <li
+                key={index}
+                className="p-3 rounded-md bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300"
+              >
+                {item}
+              </li>
+            ))
+          ) : (
+            <li className="text-gray-500 italic">No recent activity</li>
+          )}
         </ul>
       </div>
 

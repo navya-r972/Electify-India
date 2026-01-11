@@ -109,11 +109,7 @@ export default function FactMythGame() {
                             </p>
                         </div>
                         <button
-                            onClick={() => {
-                                setSelectedOption(null);
-                                setIsCorrect(null);
-                                setCurrentIndex((prev) => (prev + 1) % items.length);
-                            }}
+                            onClick={nextCard}
                             className="w-full py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-semibold transition-colors shadow-md"
                         >
                             Next Statement

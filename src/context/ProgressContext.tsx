@@ -32,62 +32,46 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<ProgressState>(defaultState);
 
   useEffect(() => {
-    // Fetch from API on mount
-    async function fetchProgress() {
-      try {
-        const res = await fetch('/api/user/progress');
-        if (res.ok) {
-          const data = await res.json();
-          setState(prev => ({
-            ...prev,
-            completedLevels: data.completedModules || [],
-            xp: data.xp || 0,
-            streak: data.streak || 0,
-            // Keep other local state
-          }));
-        }
-      } catch (error) {
-        console.error('Failed to fetch progress', error);
-      }
-    }
-    fetchProgress();
+    try {
+      const raw = localStorage.getItem('electify_progress');
+      if (raw) setState(JSON.parse(raw));
+    } catch {}
   }, []);
 
-  // Sync to localStorage as backup
   useEffect(() => {
     try {
       localStorage.setItem('electify_progress', JSON.stringify(state));
+      
+      // Sync with backend if user is logged in
+      const token = localStorage.getItem('token');
+      if (token) {
+        fetch('/api/progress', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            completedLevels: state.completedLevels,
+            xp: state.xp,
+            lastVisitedRoute: state.lastVisitedRoute,
+            mythFactStats: state.mythFactStats
+          })
+        }).catch(err => console.error('Failed to sync progress', err));
+      }
     } catch {}
   }, [state]);
 
   const value = useMemo<ProgressContextType>(() => ({
     ...state,
     saveProgress: (partial) => setState((prev) => ({ ...prev, ...partial })),
-    awardXP: async (points) => {
-      setState((prev) => ({ ...prev, xp: prev.xp + points, streak: prev.streak + 1 }));
-      try {
-        await fetch('/api/user/progress', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'update_xp', xpEarned: points })
-        });
-      } catch (e) { console.error(e); }
-    },
-    markLevelComplete: async (levelId) => {
-      setState((prev) => ({
-        ...prev,
-        completedLevels: prev.completedLevels.includes(levelId)
-          ? prev.completedLevels
-          : [...prev.completedLevels, levelId],
-      }));
-      try {
-        await fetch('/api/user/progress', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'complete_module', moduleId: levelId, xpEarned: 50 })
-        });
-      } catch (e) { console.error(e); }
-    },
+    awardXP: (points) => setState((prev) => ({ ...prev, xp: prev.xp + points, streak: prev.streak + 1 })),
+    markLevelComplete: (levelId) => setState((prev) => ({
+      ...prev,
+      completedLevels: prev.completedLevels.includes(levelId)
+        ? prev.completedLevels
+        : [...prev.completedLevels, levelId],
+    })),
     setLastVisited: (route) => setState((prev) => ({ ...prev, lastVisitedRoute: route })),
     recordMythFactResult: (correct) => setState((prev) => ({
       ...prev,

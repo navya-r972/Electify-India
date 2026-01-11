@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  profile     UserProfile?
+  progress    Progress?
+  activities  Activity[]
+  savedItems  SavedItem[]
+  quizResults QuizResult[]
+}
+
+model UserProfile {
+  id        String   @id @default(uuid())
+  school    String?
+  grade     String?
+  interests String[]
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @unique
+}
+
+model Progress {
+  id               String   @id @default(uuid())
+  completedLevels  String[]
+  xp               Int      @default(0)
+  lastVisitedRoute String   @default("/learn")
+  mythFactCorrect  Int      @default(0)
+  mythFactTotal    Int      @default(0)
+  
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           String   @unique
+  
+  updatedAt        DateTime @updatedAt
+}
+
+model Activity {
+  id          String   @id @default(uuid())
+  type        String   // e.g., "LOGIN", "QUIZ_COMPLETE", "LEVEL_COMPLETE"
+  description String
+  metadata    Json?    // Store extra details
+  createdAt   DateTime @default(now())
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+}
+
+model SavedItem {
+  id        String   @id @default(uuid())
+  title     String
+  type      String   // 'Learning Module', 'Fact Check', 'Resource'
+  url       String
+  savedDate DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+}
+
+model QuizResult {
+  id             String   @id @default(uuid())
+  score          Int
+  totalQuestions Int
+  recommendation String?
+  date           DateTime @default(now())
+  
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+}
+
+model Location {
+  id        String   @id @default(uuid())
+  name      String
+  latitude  Float
+  longitude Float
+  type      String   @default("College")
+  streams   String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

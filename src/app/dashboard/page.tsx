@@ -25,25 +25,31 @@ export default function DashboardPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [progressRes, recentRes, prefsRes] = await Promise.all([
-          fetch('/api/user/progress'),
-          fetch('/api/user/recently-viewed'),
-          fetch('/api/user/preferences')
-        ]);
-
-        if (progressRes.ok) {
-          const progressData = await progressRes.json();
-          setLearningProgress(progressData);
+        const token = localStorage.getItem('token');
+        if (!token) {
+           setLoading(false);
+           return;
         }
 
-        if (recentRes.ok) {
-          const recentData = await recentRes.json();
-          setRecentlyViewed(recentData);
-        }
+        const res = await fetch('/api/dashboard', {
+             headers: { 'Authorization': `Bearer ${token}` }
+        });
 
-        if (prefsRes.ok) {
-          const prefsData = await prefsRes.json();
-          setPreferences(prefsData);
+        if (res.ok) {
+          const data = await res.json();
+          
+          const completedCount = data.progress?.completedLevels?.length || 0;
+          const totalModules = 7; 
+          
+          setLearningProgress({
+            completed: completedCount,
+            inProgress: 0, 
+            total: totalModules,
+            percentage: (completedCount / totalModules) * 100,
+            lastModule: data.progress?.lastVisitedRoute || ''
+          });
+          
+          setRecentlyViewed(data.recentActivities || []);
         }
       } catch (error) {
         console.error('Failed to fetch dashboard data', error);

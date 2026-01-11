@@ -12,7 +12,7 @@ export const LanguageProvider = ({ children }) => {
     const fetchLanguage = async () => {
       setLoading(true);
       try {
-        const res = await fetch("http://localhost:5001/api/language", {
+        const res = await fetch("/api/language", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ language }),

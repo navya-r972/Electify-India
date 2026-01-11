@@ -1,7 +1,7 @@
 'use client';
 
 // AppLayout is now provided globally via ConditionalLayout
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import ReactMarkdown from "react-markdown";
 
@@ -15,55 +15,15 @@ export default function ChatbotPage() {
     const [inputMessage, setInputMessage] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const [blindMode, setBlindMode] = useState(false);
-    const [isListening, setIsListening] = useState(false);
-    const recognitionRef = useRef<any>(null);
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-            if (SpeechRecognition) {
-                recognitionRef.current = new SpeechRecognition();
-                recognitionRef.current.continuous = false;
-                recognitionRef.current.interimResults = false;
-                recognitionRef.current.lang = 'en-US';
-
-                recognitionRef.current.onresult = (event: any) => {
-                    const transcript = event.results[0][0].transcript;
-                    setInputMessage((prev) => prev + (prev ? ' ' : '') + transcript);
-                    setIsListening(false);
-                };
-
-                recognitionRef.current.onerror = (event: any) => {
-                    console.error('Speech recognition error', event.error);
-                    setIsListening(false);
-                };
-
-                recognitionRef.current.onend = () => {
-                    setIsListening(false);
-                };
-            }
-        }
-    }, []);
-
-    const toggleListening = () => {
-        if (!recognitionRef.current) {
-            alert("Speech recognition is not supported in your browser.");
-            return;
-        }
-        if (isListening) {
-            recognitionRef.current.stop();
-        } else {
-            recognitionRef.current.start();
-            setIsListening(true);
-        }
-    };
 
     // Sample responses - in production, this would connect to an AI API
     const fetchBotResponse = async (message: string): Promise<string> => {
-    const res = await fetch(`/api/chat`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_CHATBOT_API}/chat`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            // add later if you enable API key
+            // "x-api-key": process.env.NEXT_PUBLIC_CHATBOT_KEY!
         },
         body: JSON.stringify({
         message,
@@ -76,7 +36,7 @@ export default function ChatbotPage() {
     }
 
     const data = await res.json();
-    return data.response || data.reply;
+    return data.reply;
     };
 
 
@@ -125,14 +85,14 @@ export default function ChatbotPage() {
 
   return (
     <>
-            <div className="h-screen flex flex-col bg-gray-50 dark:bg-dark-900">
+            <div className="h-screen flex flex-col bg-gradient-to-b from-white to-slate-50 dark:from-dark-900 dark:to-dark-800">
                 {/* Header */}
-                <div className="bg-white dark:bg-dark-800 border-b border-gray-200 dark:border-dark-700 p-6 shadow-sm">
+                <div className="bg-white dark:bg-dark-800 border-b border-slate-200 dark:border-dark-700 p-6">
                     <div className="max-w-4xl mx-auto">
-                        <h1 className="text-3xl font-bold text-charcoal-900 dark:text-dark-50 mb-2">
+                        <h1 className="text-3xl font-bold text-gray-800 dark:text-dark-50 mb-2">
                             ONOE Chatbot Assistant
                         </h1>
-                        <p className="text-charcoal-600 dark:text-gray-300">
+                        <p className="text-gray-600 dark:text-gray-300">
                             Ask me anything about One Nation One Election
                         </p>
                     </div>
@@ -150,8 +110,8 @@ export default function ChatbotPage() {
                             >
                                 <div
                                     className={`max-w-[80%] rounded-lg p-4 ${message.role === 'user'
-                                            ? 'bg-primary-600 text-white shadow-md'
-                                            : 'bg-white dark:bg-dark-800 text-charcoal-800 dark:text-dark-50 border border-gray-200 dark:border-dark-700 shadow-sm'
+                                            ? 'bg-blue-600 text-white'
+                                            : 'bg-white dark:bg-dark-800 text-gray-800 dark:text-dark-50 border border-slate-200 dark:border-dark-700'
                                         }`}
                                 >
                                     <div className="prose prose-sm dark:prose-invert max-w-none">
@@ -167,7 +127,7 @@ export default function ChatbotPage() {
                                 animate={{ opacity: 1 }}
                                 className="flex justify-start"
                             >
-                                <div className="bg-white dark:bg-dark-800 rounded-lg p-4 border border-gray-200 dark:border-dark-700 shadow-sm">
+                                <div className="bg-white dark:bg-dark-800 rounded-lg p-4 border border-slate-200 dark:border-dark-700">
                                     <div className="flex space-x-2">
                                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
                                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
@@ -180,13 +140,13 @@ export default function ChatbotPage() {
                         {/* Suggested Questions (show only at start) */}
                         {messages.length === 1 && (
                             <div className="mt-8">
-                                <p className="text-sm text-charcoal-600 dark:text-gray-400 mb-3">Suggested questions:</p>
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Suggested questions:</p>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     {suggestedQuestions.map((question, index) => (
                                         <button
                                             key={index}
                                             onClick={() => setInputMessage(question)}
-                                            className="text-left p-3 bg-white dark:bg-dark-700 rounded-lg text-sm text-charcoal-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-600 transition-colors border border-gray-200 dark:border-dark-600 shadow-sm"
+                                            className="text-left p-3 bg-slate-100 dark:bg-dark-700 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-dark-600 transition-colors"
                                         >
                                             {question}
                                         </button>
@@ -198,50 +158,33 @@ export default function ChatbotPage() {
                 </div>
 
                 {/* Input Area */}
-                <div className="bg-white dark:bg-dark-800 border-t border-gray-200 dark:border-dark-700 p-6 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+                <div className="bg-white dark:bg-dark-800 border-t border-slate-200 dark:border-dark-700 p-6">
                     <div className="max-w-4xl mx-auto">
-                        <div className="flex flex-col space-y-2">
-                            <label className="flex items-center gap-2 text-sm text-charcoal-600 dark:text-gray-300 mb-2 w-fit">
-                                <input type="checkbox" checked={blindMode} onChange={() => setBlindMode(!blindMode)} 
-                                    className="rounded text-primary-600 focus:ring-primary-500"
-                                />
-                                    Blind Mode (Simplify)
+                        <div className="flex space-x-3">
+                            <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                <input type="checkbox" checked={blindMode} onChange={() => setBlindMode(!blindMode)} />
+                                    Blind Mode
                             </label>
-                            <div className="flex space-x-3">
-                                <textarea
-                                    value={inputMessage}
-                                    onChange={(e) => setInputMessage(e.target.value)}
-                                    onKeyPress={handleKeyPress}
-                                    placeholder="Ask a question about ONOE..."
-                                    rows={1}
-                                    className="flex-1 px-4 py-3 border border-gray-300 dark:border-dark-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-dark-700 dark:text-dark-50 resize-none"
-                                />
-                                <button
-                                    onClick={toggleListening}
-                                    className={`px-4 py-3 rounded-lg font-medium transition-all border ${
-                                        isListening 
-                                        ? 'bg-red-50 text-red-600 border-red-200 animate-pulse' 
-                                        : 'bg-white text-gray-500 border-gray-300 hover:bg-gray-50'
+                            <textarea
+                                value={inputMessage}
+                                onChange={(e) => setInputMessage(e.target.value)}
+                                onKeyPress={handleKeyPress}
+                                placeholder="Ask a question about ONOE..."
+                                rows={1}
+                                className="flex-1 px-4 py-3 border border-slate-300 dark:border-dark-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-dark-700 dark:text-dark-50 resize-none"
+                            />
+                            <button
+                                onClick={handleSendMessage}
+                                disabled={!inputMessage.trim()}
+                                className={`px-6 py-3 rounded-lg font-medium transition-all ${inputMessage.trim()
+                                        ? 'bg-blue-600 text-white hover:bg-blue-700'
+                                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                     }`}
-                                    title="Voice Input"
-                                >
-                                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                                    </svg>
-                                </button>
-                                <button
-                                    onClick={handleSendMessage}
-                                    disabled={!inputMessage.trim()}
-                                    className={`px-6 py-3 rounded-lg font-medium transition-all ${inputMessage.trim()
-                                            ? 'bg-primary-600 text-white hover:bg-primary-700 shadow-md'
-                                            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                                        }`}
-                                >
-                                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                                    </svg>
-                                </button>
-                            </div>
+                            >
+                                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>

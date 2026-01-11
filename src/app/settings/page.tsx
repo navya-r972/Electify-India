@@ -1,7 +1,7 @@
 'use client';
 
 // AppLayout is now provided globally via ConditionalLayout
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 
 export default function SettingsPage() {
@@ -13,60 +13,10 @@ export default function SettingsPage() {
         theme: 'Light',
         notifications: true
     });
-    const [loading, setLoading] = useState(true);
-    const [saving, setSaving] = useState(false);
-    const [message, setMessage] = useState('');
-
-    useEffect(() => {
-        async function fetchPreferences() {
-            try {
-                const res = await fetch('/api/user/preferences');
-                if (res.ok) {
-                    const data = await res.json();
-                    setSettings(prev => ({ ...prev, ...data }));
-                }
-            } catch (error) {
-                console.error('Failed to fetch preferences', error);
-            } finally {
-                setLoading(false);
-            }
-        }
-        fetchPreferences();
-    }, []);
 
     const handleSettingChange = (key: string, value: any) => {
         setSettings({ ...settings, [key]: value });
     };
-
-    const handleSave = async () => {
-        setSaving(true);
-        setMessage('');
-        try {
-            const res = await fetch('/api/user/preferences', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(settings)
-            });
-            if (res.ok) {
-                setMessage('Settings saved successfully!');
-                setTimeout(() => setMessage(''), 3000);
-            } else {
-                setMessage('Failed to save settings.');
-            }
-        } catch (error) {
-            setMessage('Error saving settings.');
-        } finally {
-            setSaving(false);
-        }
-    };
-
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
-            </div>
-        );
-    }
 
     return (
         <>
@@ -242,18 +192,9 @@ export default function SettingsPage() {
                         </motion.div>
 
                         {/* Save Button */}
-                        <div className="flex flex-col items-end">
-                            {message && (
-                                <div className={`mb-2 text-sm ${message.includes('success') ? 'text-green-600' : 'text-red-600'}`}>
-                                    {message}
-                                </div>
-                            )}
-                            <button 
-                                onClick={handleSave}
-                                disabled={saving}
-                                className={`px-8 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-all shadow-md hover:shadow-lg ${saving ? 'opacity-70 cursor-not-allowed' : ''}`}
-                            >
-                                {saving ? 'Saving...' : 'Save Changes'}
+                        <div className="flex justify-end">
+                            <button className="px-8 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-all shadow-md hover:shadow-lg">
+                                Save Changes
                             </button>
                         </div>
                     </div>

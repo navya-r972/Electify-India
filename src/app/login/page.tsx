@@ -54,18 +54,50 @@ function LoginContent() {
     },
   });
 
-  const onLoginSubmit = (data: LoginFormValues) => {
-    console.log('Login data:', data);
-    // In a real app, you would call an API to authenticate the user
-    // For now, we'll just redirect to the dashboard
-    router.push('/dashboard');
+  const onLoginSubmit = async (data: LoginFormValues) => {
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const result = await res.json();
+      
+      if (!res.ok) {
+        alert(result.message || 'Login failed');
+        return;
+      }
+      
+      localStorage.setItem('token', result.token);
+      localStorage.setItem('user', JSON.stringify(result));
+      router.push('/dashboard');
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('An error occurred during login');
+    }
   };
 
-  const onSignupSubmit = (data: SignupFormValues) => {
-    console.log('Signup data:', data);
-    // In a real app, you would call an API to register the user
-    // For now, we'll just redirect to the profile page to complete setup
-    router.push('/profile');
+  const onSignupSubmit = async (data: SignupFormValues) => {
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const result = await res.json();
+      
+      if (!res.ok) {
+        alert(result.message || 'Signup failed');
+        return;
+      }
+      
+      localStorage.setItem('token', result.token);
+      localStorage.setItem('user', JSON.stringify(result));
+      router.push('/profile');
+    } catch (error) {
+      console.error('Signup error:', error);
+      alert('An error occurred during signup');
+    }
   };
 
   const toggleMode = () => {
