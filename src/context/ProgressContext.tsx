@@ -54,6 +54,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
           body: JSON.stringify({
             completedLevels: state.completedLevels,
             xp: state.xp,
+            streak: state.streak,
             lastVisitedRoute: state.lastVisitedRoute,
             mythFactStats: state.mythFactStats
           })

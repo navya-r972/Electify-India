@@ -26,22 +26,32 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({
-        user: {
-            name: user.name,
-            email: user.email,
-            school: user.profile?.school,
-            grade: user.profile?.grade,
-            interests: user.profile?.interests
-        },
-        progress: {
-            ...user.progress,
-            mythFactStats: {
-                correct: user.progress?.mythFactCorrect || 0,
-                total: user.progress?.mythFactTotal || 0
-            }
-        },
-        recentActivities: user.activities
-    });
+  user: {
+    name: user.name,
+    email: user.email,
+    school: user.profile?.school || '',
+    grade: user.profile?.grade || '',
+    interests: user.profile?.interests || []
+  },
+  progress: {
+    xp: user.progress?.xp ?? 0,
+    level: user.progress?.level ?? 1,
+    streak: user.progress?.streak ?? 0,
+    completedLevels: user.progress?.completedLevels ?? [],
+    lastVisitedRoute: user.progress?.lastVisitedRoute ?? '/learn',
+    mythFactStats: {
+      correct: user.progress?.mythFactCorrect ?? 0,
+      total: user.progress?.mythFactTotal ?? 0
+    }
+  },
+  recentActivities: user.activities.map(a => ({
+    id: a.id,
+    title: a.title,
+    type: a.type,
+    url: a.url,
+    createdAt: a.createdAt
+  }))
+});
 
   } catch (error: any) {
     return NextResponse.json({ message: error.message }, { status: 500 });

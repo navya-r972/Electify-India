@@ -9,20 +9,21 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: 'Not authorized' }, { status: 401 });
     }
 
-    let progress = await prisma.progress.findUnique({
+    // Upsert ensures we always have a record
+    const progress = await prisma.progress.upsert({
       where: { userId },
+      update: {},
+      create: {
+        userId,
+        completedLevels: [],
+        xp: 0,
+        level: 1,
+        streak: 0,
+        lastVisitedRoute: '/learn',
+        mythFactCorrect: 0,
+        mythFactTotal: 0
+      }
     });
-
-    if (!progress) {
-      progress = await prisma.progress.create({
-        data: {
-          userId,
-          completedLevels: [],
-          xp: 0,
-          lastVisitedRoute: '/learn'
-        }
-      });
-    }
 
     return NextResponse.json(progress);
 
@@ -39,79 +40,104 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { completedLevel, completedLevels, xp, xpToAdd, lastVisitedRoute, mythFactStats } = body;
+    const { 
+      completedLevel, 
+      completedLevels, 
+      xp, 
+      xpToAdd, 
+      lastVisitedRoute, 
+      mythFactStats,
+      streak
+    } = body;
 
-    const progress = await prisma.progress.findUnique({
-      where: { userId },
-    });
+    const existing = await prisma.progress.findUnique({ where: { userId } });
 
-    if (!progress) {
-        // Initialize if missing
-        const newProgress = await prisma.progress.create({
-            data: {
-                userId,
-                completedLevels: completedLevels || (completedLevel ? [completedLevel] : []),
-                xp: xp !== undefined ? Number(xp) : (xpToAdd ? Number(xpToAdd) : 0),
-                lastVisitedRoute: lastVisitedRoute || '/learn',
-                mythFactCorrect: mythFactStats?.correct || 0,
-                mythFactTotal: mythFactStats?.total || 0
-            }
-        });
-        
-        return NextResponse.json({
-            ...newProgress,
-            mythFactStats: {
-                correct: newProgress.mythFactCorrect,
-                total: newProgress.mythFactTotal
-            }
-        });
+    // Calculate new values
+    let newLevels = existing?.completedLevels || [];
+    if (completedLevels && Array.isArray(completedLevels)) {
+        newLevels = Array.from(new Set([...newLevels, ...completedLevels]));
+    }
+    if (completedLevel && !newLevels.includes(completedLevel)) {
+        newLevels.push(completedLevel);
     }
 
-    const dataToUpdate: any = {};
-    const currentLevels = progress.completedLevels;
+    const newXp = xp !== undefined 
+        ? Number(xp) 
+        : (existing?.xp || 0) + (Number(xpToAdd) || 0);
 
-    if (completedLevels && Array.isArray(completedLevels)) {
-         // Merge unique levels from client and server
-         const newLevels = Array.from(new Set([...currentLevels, ...completedLevels]));
-         if (newLevels.length !== currentLevels.length) {
-             dataToUpdate.completedLevels = newLevels;
-         }
-    } else if (completedLevel && !currentLevels.includes(completedLevel)) {
-        dataToUpdate.completedLevels = [...currentLevels, completedLevel];
-        
-        // Log Activity for single level completion
+    const newStreak = streak !== undefined ? Number(streak) : (existing?.streak || 0);
+    const newLevel = Math.floor(newXp / 100) + 1; // Example logic
+
+    const updateData: any = {
+        completedLevels: newLevels,
+        xp: newXp,
+        level: newLevel,
+        streak: newStreak,
+    };
+
+    if (lastVisitedRoute) {
+        updateData.lastVisitedRoute = lastVisitedRoute;
+    }
+
+    if (mythFactStats) {
+        updateData.mythFactCorrect = mythFactStats.correct;
+        updateData.mythFactTotal = mythFactStats.total;
+    }
+
+    const updated = await prisma.progress.upsert({
+        where: { userId },
+        create: {
+            userId,
+            completedLevels: newLevels,
+            xp: newXp,
+            level: newLevel,
+            streak: newStreak,
+            lastVisitedRoute: lastVisitedRoute || '/learn',
+            mythFactCorrect: mythFactStats?.correct || 0,
+            mythFactTotal: mythFactStats?.total || 0
+        },
+        update: updateData
+    });
+
+    // --- Activity Logging ---
+
+    // 1. Level Completion
+    if (completedLevel && (!existing || !existing.completedLevels.includes(completedLevel))) {
         await prisma.activity.create({
             data: {
                 userId,
                 type: 'LEVEL_COMPLETE',
-                description: `Completed level ${completedLevel}`,
-                metadata: { level: completedLevel }
+                title: `Completed Level ${completedLevel}`,
+                url: `/learn/${completedLevel}`
             }
         });
     }
 
-    if (xp !== undefined) {
-        // If absolute XP is provided (e.g. from client sync), use it if it's greater
-        // or just trust the client? Trust client for sync.
-        dataToUpdate.xp = Number(xp);
-    } else if (xpToAdd) {
-        dataToUpdate.xp = { increment: Number(xpToAdd) };
+    // 2. Module View (if lastVisitedRoute changed)
+    if (lastVisitedRoute && lastVisitedRoute !== existing?.lastVisitedRoute) {
+        await prisma.activity.create({
+            data: {
+                userId,
+                type: 'MODULE_VIEW',
+                title: 'Viewed Learning Module',
+                url: lastVisitedRoute
+            }
+        });
     }
 
-    if (lastVisitedRoute) {
-        dataToUpdate.lastVisitedRoute = lastVisitedRoute;
+    // 3. Fact vs Myth (if stats changed)
+    if (mythFactStats && existing && mythFactStats.total > existing.mythFactTotal) {
+        await prisma.activity.create({
+            data: {
+                userId,
+                type: 'FACT_MYTH',
+                title: 'Played Fact vs Myth',
+                url: '/fact-check'
+            }
+        });
     }
 
-    if (Object.keys(dataToUpdate).length === 0) {
-        return NextResponse.json(progress);
-    }
-
-    const updatedProgress = await prisma.progress.update({
-        where: { userId },
-        data: dataToUpdate,
-    });
-
-    return NextResponse.json(updatedProgress);
+    return NextResponse.json(updated);
 
   } catch (error: any) {
     return NextResponse.json({ message: error.message }, { status: 500 });

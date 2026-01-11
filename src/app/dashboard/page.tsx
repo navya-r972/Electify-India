@@ -7,12 +7,16 @@ import { useState, useEffect } from 'react';
 
 export default function DashboardPage() {
   const [learningProgress, setLearningProgress] = useState({
-    completed: 0,
-    inProgress: 0,
-    total: 0,
-    percentage: 0,
-    lastModule: ''
-  });
+  completed: 0,
+  inProgress: 0,
+  total: 0,
+  percentage: 0,
+  lastModule: '',
+  xp: 0,
+  level: 1,
+  streak: 0
+});
+
 
   const [recentlyViewed, setRecentlyViewed] = useState<any[]>([]);
   const [preferences, setPreferences] = useState({
@@ -42,12 +46,16 @@ export default function DashboardPage() {
           const totalModules = 7; 
           
           setLearningProgress({
-            completed: completedCount,
-            inProgress: 0, 
-            total: totalModules,
-            percentage: (completedCount / totalModules) * 100,
-            lastModule: data.progress?.lastVisitedRoute || ''
-          });
+  completed: completedCount,
+  inProgress: 0,
+  total: totalModules,
+  percentage: (completedCount / totalModules) * 100,
+  lastModule: data.progress.lastVisitedRoute,
+  xp: data.progress.xp,
+  level: data.progress.level,
+  streak: data.progress.streak
+});
+
           
           setRecentlyViewed(data.recentActivities || []);
         }
@@ -258,7 +266,7 @@ export default function DashboardPage() {
                                 {item.type}
                               </span>
                               <span>•</span>
-                              <span>{formatTime(item.timestamp)}</span>
+                              <span>{formatTime(item.createdAt)}</span>
                             </div>
                           </div>
                           <svg className="h-5 w-5 text-gray-400 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
