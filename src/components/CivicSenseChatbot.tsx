@@ -84,7 +84,7 @@ export default function CivicSenseChatbot() {
             }`}
             dangerouslySetInnerHTML={
               msg.role === "bot"
-                ? { __html: marked.parse(msg.content) }
+                ? { __html: String(marked.parse(msg.content)) }
                 : undefined
             }
           >
